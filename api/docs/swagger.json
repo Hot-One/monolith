@@ -1,0 +1,69 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for Monolith application",
+        "title": "Monolith API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/v1/ping": {
+            "get": {
+                "description": "Ping service to check if it's running",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Service"
+                ],
+                "summary": "Ping service to check if it's running",
+                "operationId": "ping",
+                "responses": {
+                    "200": {
+                        "description": "Service is running",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "statushttp.Response": {
+            "type": "object",
+            "properties": {
+                "custom_message": {},
+                "data": {},
+                "description": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

@@ -1,0 +1,46 @@
+definitions:
+  statushttp.Response:
+    properties:
+      custom_message: {}
+      data: {}
+      description:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API for Monolith application
+  title: Monolith API
+  version: "1.0"
+paths:
+  /v1/ping:
+    get:
+      consumes:
+      - application/json
+      description: Ping service to check if it's running
+      operationId: ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Service is running
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: Ping service to check if it's running
+      tags:
+      - Service
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
