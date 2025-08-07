@@ -1,0 +1,19 @@
+services:
+  monolith-pg-db:
+    image: postgres:16-alpine3.18
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./.docker/pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  monolith-redis-db:
+    image: redis:7.2.4-alpine
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - ./.docker/redis/data:/data
