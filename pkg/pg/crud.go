@@ -121,14 +121,14 @@ func FindWithScan[T any, E any](db *gorm.DB, filter ...Filter) ([]E, error) {
 	return entites, nil
 }
 
-func PageWithScan[T any, E any](db *gorm.DB, page int, size int, filter ...Filter) ([]E, int64, error) {
+func PageWithScan[T any, E any](db *gorm.DB, page int64, size int64, filter ...Filter) (*PageData[E], error) {
 	var entites []E
 	var total int64
 	{
-		result := query[T](db, filter...).Count(&total).Offset((page - 1) * size).Limit(size).Scan(&entites)
+		result := query[T](db, filter...).Count(&total).Offset(int((page - 1) * size)).Limit(int(size)).Scan(&entites)
 		{
 			if err := result.Error; err != nil {
-				return nil, 0, err
+				return &PageData[E]{}, err
 			}
 		}
 
@@ -138,5 +138,8 @@ func PageWithScan[T any, E any](db *gorm.DB, page int, size int, filter ...Filte
 		entites = []E{}
 	}
 
-	return entites, total, nil
+	return &PageData[E]{
+		Total: total,
+		Data:  entites,
+	}, nil
 }

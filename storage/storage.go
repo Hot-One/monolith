@@ -1,13 +1,21 @@
 package storage
 
-import "gorm.io/gorm"
+import (
+	user_storage "github.com/Hot-One/monolith/storage/postgres/user"
+	user_repo "github.com/Hot-One/monolith/storage/repo/user"
+	"gorm.io/gorm"
+)
 
 type StorageInterface interface {
 	Close() error
+
+	UserStorage() user_repo.UserInterface
 }
 
 type storage struct {
 	db *gorm.DB
+
+	userStorage user_repo.UserInterface
 }
 
 func NewStorage(db *gorm.DB) StorageInterface {
@@ -23,4 +31,12 @@ func (s *storage) Close() error {
 	}
 
 	return pg.Close()
+}
+
+func (s *storage) UserStorage() user_repo.UserInterface {
+	if s.userStorage == nil {
+		s.userStorage = user_storage.NewUser(s.db)
+	}
+
+	return s.userStorage
 }

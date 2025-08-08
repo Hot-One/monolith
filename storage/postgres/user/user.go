@@ -37,3 +37,15 @@ func (u *User) Update(ctx context.Context, in user_model.User, tx pg.Filter) err
 func (u *User) FindOne(ctx context.Context, filter pg.Filter) (*user_dto.User, error) {
 	return pg.FindOneWithScan[user_model.User, user_dto.User](u.db.WithContext(ctx), filter)
 }
+
+func (u *User) Find(ctx context.Context, filter pg.Filter) ([]user_dto.User, error) {
+	return pg.FindWithScan[user_model.User, user_dto.User](u.db.WithContext(ctx), filter)
+}
+
+func (u *User) Page(ctx context.Context, filter pg.Filter, page, size int64) (*user_dto.UserPage, error) {
+	return pg.PageWithScan[user_model.User, user_dto.User](u.db.WithContext(ctx), page, size, filter)
+}
+
+func (u *User) Delete(ctx context.Context, filter pg.Filter) error {
+	return pg.Delete[user_model.User](u.db.WithContext(ctx), nil, filter)
+}

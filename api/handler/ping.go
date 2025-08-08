@@ -17,5 +17,5 @@ import (
 // @Response 400 		{object} statushttp.Response "Bad Request"
 // @Failure 500 		{object} statushttp.Response "Internal Server Error"
 func (h *handler) Ping(c *gin.Context) {
-	h.handleResponse(c, statushttp.OK, "pong")
+	statushttp.OK(c, "pong")
 }

@@ -1,6 +1,12 @@
 package user_dto
 
-import "time"
+import (
+	"time"
+
+	"github.com/Hot-One/monolith/pkg/pg"
+)
+
+type UserPage = pg.PageData[User] // @name UserPage
 
 type User struct {
 	Id         int64      `json:"id"`
@@ -14,7 +20,7 @@ type User struct {
 	Gender     int8       `json:"gender"`
 	CreatedAt  *time.Time `json:"createdAt"`
 	UpdatedAt  *time.Time `json:"updatedAt"`
-}
+} // @name User
 
 type UserCreate struct {
 	Username   string `json:"username" binding:"required"`
@@ -25,9 +31,10 @@ type UserCreate struct {
 	LastName   string `json:"last_name"`
 	MiddleName string `json:"middle_name"`
 	Gender     int8   `json:"gender"`
-}
+} // @name UserCreate
 
 type UserUpdate struct {
+	Id         int64  `json:"id" binding:"required"`
 	Username   string `json:"username"`
 	Password   string `json:"password"`
 	Phone      string `json:"phone"`
@@ -35,7 +42,8 @@ type UserUpdate struct {
 	FirstName  string `json:"first_name"`
 	LastName   string `json:"last_name"`
 	MiddleName string `json:"middle_name"`
-}
+	Gender     int8   `json:"gender"`
+} // @name UserUpdate
 
 type UserParams struct {
 	Username   string `json:"username"`
@@ -45,4 +53,4 @@ type UserParams struct {
 	FirstName  string `json:"first_name"`
 	LastName   string `json:"last_name"`
 	MiddleName string `json:"middle_name"`
-}
+} // @name UserParams

@@ -3,10 +3,12 @@ package service
 import (
 	"github.com/Hot-One/monolith/config"
 	"github.com/Hot-One/monolith/pkg/logger"
+	user_service "github.com/Hot-One/monolith/service/user"
 	"github.com/Hot-One/monolith/storage"
 )
 
 type ServiceInterface interface {
+	UserService() user_service.UserServiceInterface
 }
 
 type service struct {
@@ -23,4 +25,8 @@ func NewService(strg storage.StorageInterface, config *config.Config, logger log
 	}
 
 	return s
+}
+
+func (s *service) UserService() user_service.UserServiceInterface {
+	return user_service.NewUserService(s.storage, s.cfg, s.log)
 }

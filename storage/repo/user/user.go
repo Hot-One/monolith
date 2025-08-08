@@ -1,3 +1,18 @@
 package user_repo
 
-type UserInterface interface{}
+import (
+	"context"
+
+	user_dto "github.com/Hot-One/monolith/dto/user"
+	user_model "github.com/Hot-One/monolith/models/user"
+	"github.com/Hot-One/monolith/pkg/pg"
+)
+
+type UserInterface interface {
+	Create(context.Context, user_model.User) (int64, error)
+	Update(context.Context, user_model.User, pg.Filter) error
+	FindOne(context.Context, pg.Filter) (*user_dto.User, error)
+	Find(context.Context, pg.Filter) ([]user_dto.User, error)
+	Page(context.Context, pg.Filter, int64, int64) (*user_dto.UserPage, error)
+	Delete(context.Context, pg.Filter) error
+}
