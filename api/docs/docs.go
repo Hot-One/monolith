@@ -839,6 +839,13 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
+                "roles": {
+                    "description": "@name UserCreateRole",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/role_model.Role"
+                    }
+                },
                 "username": {
                     "type": "string"
                 }
@@ -871,6 +878,13 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
+                "roles": {
+                    "description": "@name UserUpdateRole",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/role_model.Role"
+                    }
+                },
                 "username": {
                     "type": "string"
                 }
@@ -887,6 +901,36 @@ const docTemplate = `{
         "pg.JsonObject": {
             "type": "object",
             "additionalProperties": {}
+        },
+        "role_model.Role": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pages": {
+                    "$ref": "#/definitions/pg.JsonObject"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
         },
         "statushttp.Response": {
             "type": "object",

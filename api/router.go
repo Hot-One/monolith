@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/Hot-One/monolith/api/docs"
 	"github.com/Hot-One/monolith/api/handler"
+	role_handler "github.com/Hot-One/monolith/api/handler/role"
 	user_handler "github.com/Hot-One/monolith/api/handler/user"
 	"github.com/Hot-One/monolith/config"
 	"github.com/Hot-One/monolith/pkg/logger"
@@ -44,6 +45,7 @@ func SetUpRouter(option *Router) *gin.Engine {
 	}
 
 	user_handler.NewUserHandler(v1, option.Srvc, option.Cfg, option.Log)
+	role_handler.NewRoleHandler(v1, option.Srvc, option.Cfg, option.Log)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 

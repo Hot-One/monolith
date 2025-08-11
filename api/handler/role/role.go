@@ -1,4 +1,4 @@
-package role
+package role_handler
 
 import (
 	statushttp "github.com/Hot-One/monolith/api/status_http"
@@ -17,7 +17,7 @@ type roleHandler struct {
 	srvc role_service.RoleServiceInterface
 }
 
-func NewRoleHandler(group *gin.RouterGroup, cfg *config.Config, log logger.Logger, srvc service.ServiceInterface) {
+func NewRoleHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *config.Config, log logger.Logger) {
 	handler := &roleHandler{
 		cfg:  cfg,
 		log:  log,

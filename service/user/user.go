@@ -47,6 +47,7 @@ func (s *UserService) Create(ctx context.Context, in *user_dto.UserCreate) (int6
 		MiddleName: in.MiddleName,
 		Phone:      in.Phone,
 		Gender:     in.Gender,
+		Roles:      in.Roles,
 	}
 
 	id, err := s.repo.Create(ctx, &model)
@@ -71,6 +72,8 @@ func (s *UserService) Update(ctx context.Context, in *user_dto.UserUpdate) error
 		Phone:      in.Phone,
 		Gender:     in.Gender,
 	}
+
+	
 
 	var tx = func(tx *gorm.DB) *gorm.DB {
 		return tx.Where("users.id = ?", in.Id)

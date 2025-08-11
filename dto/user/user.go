@@ -3,6 +3,7 @@ package user_dto
 import (
 	"time"
 
+	role_model "github.com/Hot-One/monolith/models/role"
 	"github.com/Hot-One/monolith/pkg/pg"
 )
 
@@ -23,18 +24,31 @@ type User struct {
 } // @name User
 
 type UserCreate struct {
-	Username   string `json:"username" binding:"required"`
-	Password   string `json:"password" binding:"required"`
-	Phone      string `json:"phone"`
-	Email      string `json:"email"`
-	FirstName  string `json:"first_name"`
-	LastName   string `json:"last_name"`
-	MiddleName string `json:"middle_name"`
-	Gender     int8   `json:"gender"`
+	Username   string            `json:"username" binding:"required"`
+	Password   string            `json:"password" binding:"required"`
+	Phone      string            `json:"phone"`
+	Email      string            `json:"email"`
+	FirstName  string            `json:"first_name"`
+	LastName   string            `json:"last_name"`
+	MiddleName string            `json:"middle_name"`
+	Gender     int8              `json:"gender"`
+	Roles      []role_model.Role `json:"roles"` // @name UserCreateRole
 } // @name UserCreate
 
 type UserUpdate struct {
-	Id         int64  `json:"id" swaggerignore:"true"`
+	Id         int64             `json:"id" swaggerignore:"true"`
+	Username   string            `json:"username"`
+	Password   string            `json:"password"`
+	Phone      string            `json:"phone"`
+	Email      string            `json:"email"`
+	FirstName  string            `json:"first_name"`
+	LastName   string            `json:"last_name"`
+	MiddleName string            `json:"middle_name"`
+	Gender     int8              `json:"gender"`
+	Roles      []role_model.Role `json:"roles"` // @name UserUpdateRole
+} // @name UserUpdate
+
+type UserUpdateWhithoutRelations struct {
 	Username   string `json:"username"`
 	Password   string `json:"password"`
 	Phone      string `json:"phone"`
@@ -43,7 +57,7 @@ type UserUpdate struct {
 	LastName   string `json:"last_name"`
 	MiddleName string `json:"middle_name"`
 	Gender     int8   `json:"gender"`
-} // @name UserUpdate
+}
 
 type UserParams struct {
 	Username   string `json:"username"`

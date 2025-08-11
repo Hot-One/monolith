@@ -89,6 +89,11 @@ definitions:
         type: string
       phone:
         type: string
+      roles:
+        description: '@name UserCreateRole'
+        items:
+          $ref: '#/definitions/role_model.Role'
+        type: array
       username:
         type: string
     required:
@@ -113,6 +118,11 @@ definitions:
         type: string
       phone:
         type: string
+      roles:
+        description: '@name UserUpdateRole'
+        items:
+          $ref: '#/definitions/role_model.Role'
+        type: array
       username:
         type: string
     type: object
@@ -123,6 +133,26 @@ definitions:
     type: object
   pg.JsonObject:
     additionalProperties: {}
+    type: object
+  role_model.Role:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      pages:
+        $ref: '#/definitions/pg.JsonObject'
+      permissions:
+        items:
+          additionalProperties: {}
+          type: object
+        type: array
+      updatedAt:
+        type: string
     type: object
   statushttp.Response:
     properties:

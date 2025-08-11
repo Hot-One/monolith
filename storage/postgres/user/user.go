@@ -28,12 +28,46 @@ func (u *User) Create(ctx context.Context, in *user_model.User) (int64, error) {
 	return in.Id, nil
 }
 
-func (u *User) Update(ctx context.Context, in *user_model.User, tx pg.Filter) error {
-	if _, err := pg.Update[user_model.User](u.db.WithContext(ctx), in, tx); err != nil {
-		return err
-	}
+func (u *User) Update(ctx context.Context, in *user_model.User, filter pg.Filter) error {
+	return pg.Transaction(
+		u.db.WithContext(ctx), func(tx *gorm.DB) error {
+			var (
+				roles = in.Roles
 
-	return nil
+				updateData = user_dto.UserUpdateWhithoutRelations{
+					Username:   in.Username,
+					Password:   in.Password,
+					Phone:      in.Phone,
+					Email:      in.Email,
+					FirstName:  in.FirstName,
+					LastName:   in.LastName,
+					MiddleName: in.MiddleName,
+					Gender:     in.Gender,
+				}
+			)
+
+			if _, err := pg.Update[user_model.User](u.db.WithContext(ctx), &updateData, filter); err != nil {
+				return err
+			}
+
+			var user user_model.User
+			if err := tx.Scopes(filter).First(&user).Error; err != nil {
+				return err
+			}
+
+			if err := tx.Model(&user).Association("Roles").Clear(); err != nil {
+				return err
+			}
+
+			if len(roles) > 0 {
+				if err := tx.Model(&user).Association("Roles").Append(roles); err != nil {
+					return err
+				}
+			}
+
+			return nil
+		},
+	)
 }
 
 func (u *User) FindOne(ctx context.Context, filter pg.Filter) (*user_dto.User, error) {
