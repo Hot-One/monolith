@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Hot-One/monolith/config"
+	user_model "github.com/Hot-One/monolith/models/user"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,4 +27,10 @@ func ConnectPostgres(gormConfig *GormConfig, cfg config.Config) (*gorm.DB, error
 	}
 
 	return db, nil
+}
+
+func Migrate(db *gorm.DB) error {
+	return db.AutoMigrate(
+		user_model.User{},
+	)
 }

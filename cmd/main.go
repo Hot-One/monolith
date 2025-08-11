@@ -49,6 +49,11 @@ func main() {
 		return
 	}
 
+	if err := postgresConn.Migrate(postgres); err != nil {
+		log.Error("Failed to migrate PostgreSQL database", logger.Error(err))
+		return
+	}
+
 	var (
 		storages = storage.NewStorage(postgres)
 		services = service.NewService(storages, &cfg, log)

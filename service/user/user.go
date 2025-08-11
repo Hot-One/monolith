@@ -26,14 +26,14 @@ type UserServiceInterface interface {
 type UserService struct {
 	cfg  *config.Config
 	log  logger.Logger
-	strg user_repo.UserInterface
+	repo user_repo.UserInterface
 }
 
 func NewUserService(strg storage.StorageInterface, config *config.Config, logger logger.Logger) *UserService {
 	return &UserService{
 		cfg:  config,
 		log:  logger,
-		strg: strg.UserStorage(),
+		repo: strg.UserStorage(),
 	}
 }
 
@@ -49,7 +49,7 @@ func (s *UserService) Create(ctx context.Context, in *user_dto.UserCreate) (int6
 		Gender:     in.Gender,
 	}
 
-	id, err := s.strg.Create(ctx, model)
+	id, err := s.repo.Create(ctx, model)
 	{
 		if err != nil {
 			s.log.Error("Service: UserService: Create: error while creating user", logger.Error(err))
@@ -76,7 +76,7 @@ func (s *UserService) Update(ctx context.Context, in *user_dto.UserUpdate) error
 		return tx.Where("users.id = ?", in.Id)
 	}
 
-	return s.strg.Update(ctx, model, tx)
+	return s.repo.Update(ctx, model, tx)
 }
 
 func (s *UserService) FindOne(ctx context.Context, id *pg.Id) (*user_dto.User, error) {
@@ -86,7 +86,7 @@ func (s *UserService) FindOne(ctx context.Context, id *pg.Id) (*user_dto.User, e
 			Where("users.id = ?", id.Id)
 	}
 
-	return s.strg.FindOne(ctx, tx)
+	return s.repo.FindOne(ctx, tx)
 }
 
 func (s *UserService) Find(ctx context.Context, params *user_dto.UserParams) ([]user_dto.User, error) {
@@ -111,7 +111,7 @@ func (s *UserService) Find(ctx context.Context, params *user_dto.UserParams) ([]
 		return tx.Select("users.*")
 	}
 
-	return s.strg.Find(ctx, tx)
+	return s.repo.Find(ctx, tx)
 }
 
 func (s *UserService) Page(ctx context.Context, params *user_dto.UserParams, page, size int64) (*user_dto.UserPage, error) {
@@ -136,7 +136,7 @@ func (s *UserService) Page(ctx context.Context, params *user_dto.UserParams, pag
 		return tx.Select("users.*")
 	}
 
-	return s.strg.Page(ctx, tx, page, size)
+	return s.repo.Page(ctx, tx, page, size)
 }
 
 func (s *UserService) Delete(ctx context.Context, id *pg.Id) error {
@@ -144,7 +144,7 @@ func (s *UserService) Delete(ctx context.Context, id *pg.Id) error {
 		return tx.Where("users.id = ?", id.Id)
 	}
 
-	if err := s.strg.Delete(ctx, tx); err != nil {
+	if err := s.repo.Delete(ctx, tx); err != nil {
 		s.log.Error("Service: UserService: Delete: error while deleting user", logger.Error(err))
 		return err
 	}

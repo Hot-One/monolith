@@ -11,7 +11,7 @@ type User struct {
 	FirstName  string     `json:"first_name" gorm:"type:varchar(50)"`
 	LastName   string     `json:"last_name" gorm:"type:varchar(50)"`
 	MiddleName string     `json:"middle_name" gorm:"type:varchar(50)"`
-	Gender     int8       `json:"gender" gorm:"type:tinyint"`
+	Gender     int8       `json:"gender" gorm:"type:int"`
 	CreatedAt  *time.Time `json:"createdAt" gorm:"autoCreateTime:true"`
 	UpdatedAt  *time.Time `json:"updatedAt" gorm:"autoUpdateTime:true"`
 }
