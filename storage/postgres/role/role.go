@@ -20,16 +20,16 @@ func NewRole(db *gorm.DB) role_repo.RoleInterface {
 	}
 }
 
-func (r *Role) Create(ctx context.Context, in role_model.Role) (int64, error) {
-	if err := pg.Create(r.db.WithContext(ctx), &in); err != nil {
+func (r *Role) Create(ctx context.Context, in *role_model.Role) (int64, error) {
+	if err := pg.Create(r.db.WithContext(ctx), in); err != nil {
 		return 0, err
 	}
 
 	return in.Id, nil
 }
 
-func (r *Role) Update(ctx context.Context, in role_model.Role, tx pg.Filter) error {
-	if _, err := pg.Update[role_model.Role](r.db.WithContext(ctx), &in, tx); err != nil {
+func (r *Role) Update(ctx context.Context, in *role_model.Role, tx pg.Filter) error {
+	if _, err := pg.Update[role_model.Role](r.db.WithContext(ctx), in, tx); err != nil {
 		return err
 	}
 

@@ -9,8 +9,8 @@ import (
 )
 
 type UserInterface interface {
-	Create(context.Context, user_model.User) (int64, error)
-	Update(context.Context, user_model.User, pg.Filter) error
+	Create(context.Context, *user_model.User) (int64, error)
+	Update(context.Context, *user_model.User, pg.Filter) error
 	FindOne(context.Context, pg.Filter) (*user_dto.User, error)
 	Find(context.Context, pg.Filter) ([]user_dto.User, error)
 	Page(context.Context, pg.Filter, int64, int64) (*user_dto.UserPage, error)

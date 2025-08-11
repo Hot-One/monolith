@@ -26,10 +26,11 @@ func NewUserHandler(group *gin.RouterGroup, srvc service.ServiceInterface, confi
 
 	user := group.Group("/user")
 	{
-		user.POST("/", handler.Create)
+		user.POST("", handler.Create)
 		user.PATCH("/:id", handler.Update)
+		user.GET("", handler.GetList)
 		user.GET("/:id", handler.GetById)
-		user.GET("/search", handler.GetList)
+		user.GET("/search", handler.Search)
 		user.DELETE("/:id", handler.Delete)
 	}
 }
@@ -40,7 +41,7 @@ func NewUserHandler(group *gin.RouterGroup, srvc service.ServiceInterface, confi
 // @Tags 			User Service
 // @Accept 			json
 // @Produce 		json
-// @Param 			user body user_dto.UserCreate true "User Create"
+// @Param 			input body user_dto.UserCreate true "User Create"
 // @Success 		201 {object} pg.Id "User created successfully"
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
@@ -89,9 +90,11 @@ func (h *userHandler) Update(c *gin.Context) {
 	}
 
 	id, err := statushttp.GetId(c)
-	if err != nil {
-		statushttp.BadRequest(c, err.Error())
-		return
+	{
+		if err != nil {
+			statushttp.BadRequest(c, err.Error())
+			return
+		}
 	}
 
 	in.Id = id
@@ -128,9 +131,11 @@ func (h *userHandler) GetList(c *gin.Context) {
 	}
 
 	page, limit, err := statushttp.GetPageLimit(c)
-	if err != nil {
-		statushttp.BadRequest(c, err.Error())
-		return
+	{
+		if err != nil {
+			statushttp.BadRequest(c, err.Error())
+			return
+		}
 	}
 
 	items, err := h.srvc.Page(c.Request.Context(), &in, page, limit)
@@ -189,9 +194,11 @@ func (h *userHandler) Search(c *gin.Context) {
 // @Router 			/user/{id} [get]
 func (h *userHandler) GetById(c *gin.Context) {
 	id, err := statushttp.GetId(c)
-	if err != nil {
-		statushttp.BadRequest(c, err.Error())
-		return
+	{
+		if err != nil {
+			statushttp.BadRequest(c, err.Error())
+			return
+		}
 	}
 
 	item, err := h.srvc.FindOne(c.Request.Context(), &pg.Id{Id: id})
@@ -218,9 +225,11 @@ func (h *userHandler) GetById(c *gin.Context) {
 // @Router 			/user/{id} [delete]
 func (h *userHandler) Delete(c *gin.Context) {
 	id, err := statushttp.GetId(c)
-	if err != nil {
-		statushttp.BadRequest(c, err.Error())
-		return
+	{
+		if err != nil {
+			statushttp.BadRequest(c, err.Error())
+			return
+		}
 	}
 
 	if err := h.srvc.Delete(c.Request.Context(), &pg.Id{Id: id}); err != nil {

@@ -1,5 +1,53 @@
 basePath: /v1
 definitions:
+  Role:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      pages:
+        $ref: '#/definitions/pg.JsonObject'
+      permissions:
+        items:
+          additionalProperties: {}
+          type: object
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  RoleCreate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      pages:
+        $ref: '#/definitions/pg.JsonObject'
+      permissions:
+        items:
+          additionalProperties: {}
+          type: object
+        type: array
+    type: object
+  RoleUpdate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      pages:
+        $ref: '#/definitions/pg.JsonObject'
+      permissions:
+        items:
+          additionalProperties: {}
+          type: object
+        type: array
+    type: object
   User:
     properties:
       createdAt:
@@ -57,8 +105,6 @@ definitions:
         type: string
       gender:
         type: integer
-      id:
-        type: integer
       last_name:
         type: string
       middle_name:
@@ -69,13 +115,14 @@ definitions:
         type: string
       username:
         type: string
-    required:
-    - id
     type: object
   pg.Id:
     properties:
       id:
         type: integer
+    type: object
+  pg.JsonObject:
+    additionalProperties: {}
     type: object
   statushttp.Response:
     properties:
@@ -91,6 +138,209 @@ info:
   title: Monolith API
   version: "1.0"
 paths:
+  /role:
+    get:
+      consumes:
+      - application/json
+      description: role-service-getlist
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: first_name
+        type: string
+      - in: query
+        name: last_name
+        type: string
+      - in: query
+        name: middle_name
+        type: string
+      - in: query
+        name: password
+        type: string
+      - in: query
+        name: phone
+        type: string
+      - in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Role List
+          schema:
+            $ref: '#/definitions/Role'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: role-service-getlist
+      tags:
+      - Role Service
+    post:
+      consumes:
+      - application/json
+      description: role-service-create
+      parameters:
+      - description: Role Create
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/RoleCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Role created successfully
+          schema:
+            $ref: '#/definitions/pg.Id'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: role-service-create
+      tags:
+      - Role Service
+  /role/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: role-service-delete
+      parameters:
+      - description: Id
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: role-service-delete
+      tags:
+      - Role Service
+    get:
+      consumes:
+      - application/json
+      description: role-service-getbyid
+      parameters:
+      - description: Id
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Role retrieved successfully
+          schema:
+            $ref: '#/definitions/Role'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: role-service-getbyid
+      tags:
+      - Role Service
+    put:
+      consumes:
+      - application/json
+      description: role-service-update
+      parameters:
+      - description: Id
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Role Update
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/RoleUpdate'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: role-service-update
+      tags:
+      - Role Service
+  /role/search:
+    get:
+      consumes:
+      - application/json
+      description: role-service-search
+      parameters:
+      - in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Role list retrieved successfully
+          schema:
+            items:
+              $ref: '#/definitions/Role'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: role-service-search
+      tags:
+      - Role Service
   /user:
     get:
       consumes:
@@ -153,7 +403,7 @@ paths:
       parameters:
       - description: User Create
         in: body
-        name: user
+        name: input
         required: true
         schema:
           $ref: '#/definitions/UserCreate'

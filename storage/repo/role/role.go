@@ -9,10 +9,10 @@ import (
 )
 
 type RoleInterface interface {
-	Create(ctx context.Context, in role_model.Role) (int64, error)
-	Update(ctx context.Context, in role_model.Role, tx pg.Filter) error
-	FindOne(ctx context.Context, filter pg.Filter) (*role_dto.Role, error)
-	Find(ctx context.Context, filter pg.Filter) ([]role_dto.Role, error)
-	Page(ctx context.Context, filter pg.Filter, page, size int64) (*role_dto.RolePage, error)
-	Delete(ctx context.Context, filter pg.Filter) error
+	Create(context.Context, *role_model.Role) (int64, error)
+	Update(context.Context, *role_model.Role, pg.Filter) error
+	FindOne(context.Context, pg.Filter) (*role_dto.Role, error)
+	Find(context.Context, pg.Filter) ([]role_dto.Role, error)
+	Page(context.Context, pg.Filter, int64, int64) (*role_dto.RolePage, error)
+	Delete(context.Context, pg.Filter) error
 }

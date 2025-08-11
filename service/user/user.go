@@ -49,7 +49,7 @@ func (s *UserService) Create(ctx context.Context, in *user_dto.UserCreate) (int6
 		Gender:     in.Gender,
 	}
 
-	id, err := s.repo.Create(ctx, model)
+	id, err := s.repo.Create(ctx, &model)
 	{
 		if err != nil {
 			s.log.Error("Service: UserService: Create: error while creating user", logger.Error(err))
@@ -76,7 +76,7 @@ func (s *UserService) Update(ctx context.Context, in *user_dto.UserUpdate) error
 		return tx.Where("users.id = ?", in.Id)
 	}
 
-	return s.repo.Update(ctx, model, tx)
+	return s.repo.Update(ctx, &model, tx)
 }
 
 func (s *UserService) FindOne(ctx context.Context, id *pg.Id) (*user_dto.User, error) {

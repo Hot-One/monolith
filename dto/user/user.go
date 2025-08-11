@@ -34,7 +34,7 @@ type UserCreate struct {
 } // @name UserCreate
 
 type UserUpdate struct {
-	Id         int64  `json:"id" binding:"required"`
+	Id         int64  `json:"id" swaggerignore:"true"`
 	Username   string `json:"username"`
 	Password   string `json:"password"`
 	Phone      string `json:"phone"`
