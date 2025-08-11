@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/Hot-One/monolith/api/docs"
 	"github.com/Hot-One/monolith/api/handler"
+	user_handler "github.com/Hot-One/monolith/api/handler/user"
 	"github.com/Hot-One/monolith/config"
 	"github.com/Hot-One/monolith/pkg/logger"
 	"github.com/Hot-One/monolith/service"
@@ -20,6 +21,7 @@ type router struct {
 // @title Monolith API
 // @version 1.0
 // @description API for Monolith application
+// @BasePath /v1
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
@@ -40,6 +42,8 @@ func SetUpRouter(option *router) *gin.Engine {
 	{
 		v1.GET("/ping")
 	}
+
+	user_handler.NewUserHandler(v1, option.srvc, option.cfg, option.log)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 

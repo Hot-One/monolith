@@ -20,7 +20,7 @@ type UserServiceInterface interface {
 	FindOne(context.Context, *pg.Id) (*user_dto.User, error)
 	Find(context.Context, *user_dto.UserParams) ([]user_dto.User, error)
 	Page(context.Context, *user_dto.UserParams, int64, int64) (*user_dto.UserPage, error)
-	Delete(context.Context, pg.Id) error
+	Delete(context.Context, *pg.Id) error
 }
 
 type UserService struct {
@@ -139,7 +139,7 @@ func (s *UserService) Page(ctx context.Context, params *user_dto.UserParams, pag
 	return s.strg.Page(ctx, tx, page, size)
 }
 
-func (s *UserService) Delete(ctx context.Context, id pg.Id) error {
+func (s *UserService) Delete(ctx context.Context, id *pg.Id) error {
 	var tx = func(tx *gorm.DB) *gorm.DB {
 		return tx.Where("users.id = ?", id.Id)
 	}

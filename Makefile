@@ -3,5 +3,18 @@ APP := template
 APP_CMD_DIR := ./cmd
 
 
+.PHONY: swag-install swag-gen
+
+swag-install:
+	go install github.com/swaggo/swag/cmd/swag@latest
+
 swag-gen:
-	swag init -g api/router.go -o api/docs
+	@if ! command -v swag >/dev/null 2>&1; then \
+		echo "Installing swag..."; \
+		go install github.com/swaggo/swag/cmd/swag@latest; \
+	fi
+	@if command -v swag >/dev/null 2>&1; then \
+		swag init -g api/router.go -o api/docs --parseVendor; \
+	else \
+		$(shell go env GOPATH)/bin/swag init -g api/router.go -o api/docs --parseVendor; \
+	fi

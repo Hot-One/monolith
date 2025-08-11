@@ -1,7 +1,84 @@
+basePath: /v1
 definitions:
+  User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: integer
+      id:
+        type: integer
+      last_name:
+        type: string
+      middle_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+  UserCreate:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: integer
+      last_name:
+        type: string
+      middle_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  UserPage:
+    type: object
+  UserUpdate:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: integer
+      id:
+        type: integer
+      last_name:
+        type: string
+      middle_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    required:
+    - id
+    type: object
+  pg.Id:
+    properties:
+      id:
+        type: integer
+    type: object
   statushttp.Response:
     properties:
-      custom_message: {}
       data: {}
       description:
         type: string
@@ -14,6 +91,227 @@ info:
   title: Monolith API
   version: "1.0"
 paths:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: user-service-get-list
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: first_name
+        type: string
+      - in: query
+        name: last_name
+        type: string
+      - in: query
+        name: middle_name
+        type: string
+      - in: query
+        name: password
+        type: string
+      - in: query
+        name: phone
+        type: string
+      - in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User list retrieved successfully
+          schema:
+            $ref: '#/definitions/UserPage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: user-service-get-list
+      tags:
+      - User Service
+    post:
+      consumes:
+      - application/json
+      description: user-service-create
+      parameters:
+      - description: User Create
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/UserCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/pg.Id'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: user-service-create
+      tags:
+      - User Service
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: user-service-delete
+      parameters:
+      - description: Id
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: user-service-delete
+      tags:
+      - User Service
+    get:
+      consumes:
+      - application/json
+      description: user-service-get-by-id
+      parameters:
+      - description: Id
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User retrieved successfully
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: user-service-get-by-id
+      tags:
+      - User Service
+    put:
+      consumes:
+      - application/json
+      description: user-service-update
+      parameters:
+      - description: Id
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User Update
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: user-service-update
+      tags:
+      - User Service
+  /user/search:
+    get:
+      consumes:
+      - application/json
+      description: user-service-search
+      parameters:
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: first_name
+        type: string
+      - in: query
+        name: last_name
+        type: string
+      - in: query
+        name: middle_name
+        type: string
+      - in: query
+        name: password
+        type: string
+      - in: query
+        name: phone
+        type: string
+      - in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User list retrieved successfully
+          schema:
+            items:
+              $ref: '#/definitions/User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: user-service-search
+      tags:
+      - User Service
   /v1/ping:
     get:
       consumes:

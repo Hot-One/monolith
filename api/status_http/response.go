@@ -2,6 +2,7 @@ package statushttp
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -120,4 +121,34 @@ func BadEnvironment(c *gin.Context, data any) {
 			Data:        data,
 		},
 	)
+}
+
+func GetId(c *gin.Context) (int64, error) {
+	var idStr = c.Param("id")
+
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+}
+
+func GetPageLimit(c *gin.Context) (int64, int64, error) {
+	var (
+		pageStr  = c.Query("page")
+		limitStr = c.Query("limit")
+	)
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return int64(page), int64(limit), nil
 }
