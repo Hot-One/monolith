@@ -17,6 +17,7 @@ type Config struct {
 	PostgresHost     string
 	PostgresPort     string
 	PostgresUser     string
+	PostgresDatabase string
 	PostgresPassword string
 	PostgresMaxConns int
 
@@ -44,6 +45,7 @@ func Load() Config {
 	c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", ""))
 	c.PostgresPort = cast.ToString(getOrReturnDefault("POSTGRES_PORT", ""))
 	c.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", ""))
+	c.PostgresDatabase = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", ""))
 	c.PostgresPassword = cast.ToString(getOrReturnDefault("POSTGRES_PASSWORD", ""))
 	c.PostgresMaxConns = cast.ToInt(getOrReturnDefault("POSTGRES_MAX_CONNS", 0))
 

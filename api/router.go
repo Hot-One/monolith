@@ -12,10 +12,10 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-type router struct {
-	cfg  *config.Config
-	log  logger.Logger
-	srvc service.ServiceInterface
+type Router struct {
+	Cfg  *config.Config
+	Log  logger.Logger
+	Srvc service.ServiceInterface
 }
 
 // @title Monolith API
@@ -25,25 +25,25 @@ type router struct {
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-func SetUpRouter(option *router) *gin.Engine {
-	docs.SwaggerInfo.Title = option.cfg.ServiceName
-	docs.SwaggerInfo.Schemes = []string{option.cfg.HTTPScheme}
+func SetUpRouter(option *Router) *gin.Engine {
+	docs.SwaggerInfo.Title = option.Cfg.ServiceName
+	docs.SwaggerInfo.Schemes = []string{option.Cfg.HTTPScheme}
 
 	var (
 		r        = gin.Default()
-		handlers = handler.NewHandler(option.srvc, option.cfg, option.log)
+		handlers = handler.NewHandler(option.Srvc, option.Cfg, option.Log)
 	)
 
 	r.Use(gin.Recovery(), gin.Logger(), customCORSMiddleware())
 
-	url := ginSwagger.URL("swagger/doc.json")
+	url := ginSwagger.URL("/swagger/doc.json")
 
 	v1 := r.Group("/v1", handlers.Ping)
 	{
 		v1.GET("/ping")
 	}
 
-	user_handler.NewUserHandler(v1, option.srvc, option.cfg, option.log)
+	user_handler.NewUserHandler(v1, option.Srvc, option.Cfg, option.Log)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 

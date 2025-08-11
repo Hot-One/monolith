@@ -1,10 +1,3 @@
-CURRENT_DIR := $(shell pwd)
-APP := template
-APP_CMD_DIR := ./cmd
-
-
-.PHONY: swag-install swag-gen
-
 swag-install:
 	go install github.com/swaggo/swag/cmd/swag@latest
 

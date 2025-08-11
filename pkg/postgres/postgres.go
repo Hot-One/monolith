@@ -17,7 +17,7 @@ func ConnectPostgres(gormConfig *GormConfig, cfg config.Config) (*gorm.DB, error
 		cfg.PostgresPort,
 		cfg.PostgresUser,
 		cfg.PostgresPassword,
-		cfg.ServiceName,
+		cfg.PostgresDatabase,
 	)
 
 	db, err := gorm.Open(postgres.Open(pgConnStr), gormConfig)
