@@ -60,6 +60,11 @@ func main() {
 		server   = api.SetUpRouter(&api.Router{Cfg: &cfg, Log: log, Srvc: services})
 	)
 
+	if err := postgresConn.CreateSystemRows(storages); err != nil {
+		log.Error("Failed to create system rows", logger.Error(err))
+		return
+	}
+
 	if err := server.Run(":" + cfg.HTTPPort); err != nil {
 		log.Error("Failed to run server", logger.Error(err))
 		return

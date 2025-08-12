@@ -8,6 +8,7 @@ import (
 	"github.com/Hot-One/monolith/pkg/pg"
 	role_repo "github.com/Hot-One/monolith/storage/repo/role"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Role struct {
@@ -34,6 +35,28 @@ func (r *Role) Update(ctx context.Context, in *role_model.Role, tx pg.Filter) er
 	}
 
 	return nil
+}
+
+func (r *Role) Upsert(ctx context.Context, in []role_model.Role) error {
+	return pg.Transaction(
+		r.db.WithContext(ctx),
+		func(tx *gorm.DB) error {
+			var result = tx.
+				Clauses(
+					clause.OnConflict{
+						Columns:   []clause.Column{{Name: "name"}},
+						DoUpdates: clause.AssignmentColumns([]string{"name", "description"}),
+					},
+				).
+				Create(&in)
+			if result.Error != nil {
+				return result.Error
+			}
+
+			return nil
+
+		},
+	)
 }
 
 func (r *Role) FindOne(ctx context.Context, filter pg.Filter) (*role_dto.Role, error) {

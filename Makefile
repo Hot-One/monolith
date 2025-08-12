@@ -1,3 +1,6 @@
+run:
+	go run cmd/main.go
+
 swag-install:
 	go install github.com/swaggo/swag/cmd/swag@latest
 

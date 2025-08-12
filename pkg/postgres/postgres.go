@@ -1,11 +1,14 @@
 package postgres
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/Hot-One/monolith/config"
 	role_model "github.com/Hot-One/monolith/models/role"
 	user_model "github.com/Hot-One/monolith/models/user"
+	"github.com/Hot-One/monolith/pkg/static"
+	"github.com/Hot-One/monolith/storage"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -35,4 +38,16 @@ func Migrate(db *gorm.DB) error {
 		user_model.User{},
 		role_model.Role{},
 	)
+}
+
+func CreateSystemRows(strg storage.StorageInterface) error {
+	var roles = []role_model.Role{}
+	for _, name := range static.Roles {
+		roles = append(roles, role_model.Role{
+			Name:        name,
+			Description: "This is system role",
+		})
+	}
+
+	return strg.RoleStorage().Upsert(context.Background(), roles)
 }
