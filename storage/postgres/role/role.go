@@ -45,7 +45,7 @@ func (r *Role) Upsert(ctx context.Context, in []role_model.Role) error {
 				Clauses(
 					clause.OnConflict{
 						Columns:   []clause.Column{{Name: "name"}},
-						DoUpdates: clause.AssignmentColumns([]string{"name", "description"}),
+						DoUpdates: clause.AssignmentColumns([]string{"name", "description", "permissions"}),
 					},
 				).
 				Create(&in)

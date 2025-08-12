@@ -7,6 +7,7 @@ import (
 	"github.com/Hot-One/monolith/config"
 	role_model "github.com/Hot-One/monolith/models/role"
 	user_model "github.com/Hot-One/monolith/models/user"
+	"github.com/Hot-One/monolith/pkg/pg"
 	"github.com/Hot-One/monolith/pkg/static"
 	"github.com/Hot-One/monolith/storage"
 	"gorm.io/driver/postgres"
@@ -40,12 +41,19 @@ func Migrate(db *gorm.DB) error {
 	)
 }
 
-func CreateSystemRows(strg storage.StorageInterface) error {
+func CreateSystemRows(strg storage.StorageInterface, routes []*static.Route) error {
 	var roles = []role_model.Role{}
+	var routesMap = make(pg.JsonObject, len(routes))
+
+	for _, route := range routes {
+		routesMap[route.Path] = route.Method
+	}
+
 	for _, name := range static.Roles {
 		roles = append(roles, role_model.Role{
 			Name:        name,
 			Description: "This is system role",
+			Permissions: routesMap,
 		})
 	}
 

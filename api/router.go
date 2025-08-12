@@ -7,6 +7,7 @@ import (
 	user_handler "github.com/Hot-One/monolith/api/handler/user"
 	"github.com/Hot-One/monolith/config"
 	"github.com/Hot-One/monolith/pkg/logger"
+	"github.com/Hot-One/monolith/pkg/static"
 	"github.com/Hot-One/monolith/service"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -14,9 +15,10 @@ import (
 )
 
 type Router struct {
-	Cfg  *config.Config
-	Log  logger.Logger
-	Srvc service.ServiceInterface
+	Cfg    *config.Config
+	Log    logger.Logger
+	Routes []*static.Route
+	Srvc   service.ServiceInterface
 }
 
 // @title Monolith API
@@ -46,6 +48,14 @@ func SetUpRouter(option *Router) *gin.Engine {
 
 	user_handler.NewUserHandler(v1, option.Srvc, option.Cfg, option.Log)
 	role_handler.NewRoleHandler(v1, option.Srvc, option.Cfg, option.Log)
+
+	routes := r.Routes()
+	for _, route := range routes {
+		option.Routes = append(option.Routes, &static.Route{
+			Method: route.Method,
+			Path:   route.Path,
+		})
+	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 

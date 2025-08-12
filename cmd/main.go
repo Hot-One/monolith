@@ -5,6 +5,7 @@ import (
 	"github.com/Hot-One/monolith/config"
 	"github.com/Hot-One/monolith/pkg/logger"
 	postgresConn "github.com/Hot-One/monolith/pkg/postgres"
+	"github.com/Hot-One/monolith/pkg/static"
 	"github.com/Hot-One/monolith/service"
 	"github.com/Hot-One/monolith/storage"
 	"github.com/gin-gonic/gin"
@@ -57,10 +58,18 @@ func main() {
 	var (
 		storages = storage.NewStorage(postgres)
 		services = service.NewService(storages, &cfg, log)
-		server   = api.SetUpRouter(&api.Router{Cfg: &cfg, Log: log, Srvc: services})
 	)
 
-	if err := postgresConn.CreateSystemRows(storages); err != nil {
+	serverOption := &api.Router{
+		Cfg:    &cfg,
+		Log:    log,
+		Srvc:   services,
+		Routes: []*static.Route{},
+	}
+
+	var server = api.SetUpRouter(serverOption)
+
+	if err := postgresConn.CreateSystemRows(storages, serverOption.Routes); err != nil {
 		log.Error("Failed to create system rows", logger.Error(err))
 		return
 	}

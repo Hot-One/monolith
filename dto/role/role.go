@@ -9,7 +9,7 @@ type Role struct {
 	Name        string        `json:"name"`
 	Description string        `json:"description"`
 	Pages       pg.JsonObject `json:"pages"`
-	Permissions pg.JsonArray  `json:"permissions"`
+	Permissions pg.JsonObject `json:"permissions"`
 	CreatedAt   string        `json:"createdAt"`
 	UpdatedAt   string        `json:"updatedAt"`
 } // @name Role
@@ -18,7 +18,7 @@ type RoleCreate struct {
 	Name        string        `json:"name"`
 	Description string        `json:"description"`
 	Pages       pg.JsonObject `json:"pages"`
-	Permissions pg.JsonArray  `json:"permissions"`
+	Permissions pg.JsonObject `json:"permissions"`
 } // @name RoleCreate
 
 type RoleUpdate struct {
@@ -26,7 +26,7 @@ type RoleUpdate struct {
 	Name        string        `json:"name"`
 	Description string        `json:"description"`
 	Pages       pg.JsonObject `json:"pages"`
-	Permissions pg.JsonArray  `json:"permissions"`
+	Permissions pg.JsonObject `json:"permissions"`
 } // @name RoleUpdate
 
 type RoleParams struct {
