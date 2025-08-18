@@ -37,7 +37,7 @@ func NewAppHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *c
 // @Tags      		app-service
 // @Accept    		json
 // @Produce   		json
-// @Param     		input  body  app_service.CreateRequest  true  "Create App"
+// @Param     		input  body  app_dto.ApplicationCreate  true  "Create App"
 // @Success 		201 {object} pg.Id "Role created successfully"
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
@@ -69,7 +69,7 @@ func (h *appHandler) Create(c *gin.Context) {
 // @Accept    		json
 // @Produce   		json
 // @Param     		id     path  string  true  "Id"
-// @Param     		input  body  app_service.UpdateRequest  true  "Update App"
+// @Param     		input  body  app_dto.ApplicationUpdate  true  "Update App"
 // @Success 		204
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
@@ -109,7 +109,7 @@ func (h *appHandler) Update(c *gin.Context) {
 // @Produce   		json
 // @Param     		page  query  int  false  "Page number" default(1)
 // @Param     		limit query  int  false  "Number of items per page" default(10)
-// @Param 			input query user_dto.UserParams false "Filter parameters"
+// @Param 			input query  app_dto.ApplicationParams false "Filter parameters"
 // @Success 		200 {object} app_dto.ApplicationPage "List of Apps"
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
@@ -148,7 +148,7 @@ func (h *appHandler) GetList(c *gin.Context) {
 // @Tags        	app-service
 // @Accept     		json
 // @Produce    		json
-// @Param			input query app_dto.ApplicationSearchParams false "Search parameters"
+// @Param			input query  app_dto.ApplicationParams false "Search parameters"
 // @Success    		200 {array}  app_dto.Application "Search Results"
 // @Failure    		400 {object} statushttp.Response "Bad Request"
 // @Failure    		500 {object} statushttp.Response "Internal Server Error"

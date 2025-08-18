@@ -1,7 +1,38 @@
 basePath: /v1
 definitions:
+  Application:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  ApplicationCreate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  ApplicationPage:
+    type: object
+  ApplicationUpdate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
   Role:
     properties:
+      applicationId:
+        type: integer
       createdAt:
         type: string
       description:
@@ -13,15 +44,14 @@ definitions:
       pages:
         $ref: '#/definitions/pg.JsonObject'
       permissions:
-        items:
-          additionalProperties: {}
-          type: object
-        type: array
+        $ref: '#/definitions/pg.JsonObject'
       updatedAt:
         type: string
     type: object
   RoleCreate:
     properties:
+      applicationId:
+        type: integer
       description:
         type: string
       name:
@@ -29,13 +59,12 @@ definitions:
       pages:
         $ref: '#/definitions/pg.JsonObject'
       permissions:
-        items:
-          additionalProperties: {}
-          type: object
-        type: array
+        $ref: '#/definitions/pg.JsonObject'
     type: object
   RoleUpdate:
     properties:
+      applicationId:
+        type: integer
       description:
         type: string
       name:
@@ -43,10 +72,7 @@ definitions:
       pages:
         $ref: '#/definitions/pg.JsonObject'
       permissions:
-        items:
-          additionalProperties: {}
-          type: object
-        type: array
+        $ref: '#/definitions/pg.JsonObject'
     type: object
   User:
     properties:
@@ -126,6 +152,19 @@ definitions:
       username:
         type: string
     type: object
+  app_model.Application:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   pg.Id:
     properties:
       id:
@@ -136,6 +175,10 @@ definitions:
     type: object
   role_model.Role:
     properties:
+      application:
+        $ref: '#/definitions/app_model.Application'
+      applicationId:
+        type: integer
       createdAt:
         type: string
       description:
@@ -147,10 +190,7 @@ definitions:
       pages:
         $ref: '#/definitions/pg.JsonObject'
       permissions:
-        items:
-          additionalProperties: {}
-          type: object
-        type: array
+        $ref: '#/definitions/pg.JsonObject'
       updatedAt:
         type: string
     type: object
@@ -168,6 +208,194 @@ info:
   title: Monolith API
   version: "1.0"
 paths:
+  /app:
+    get:
+      consumes:
+      - application/json
+      description: app-service-get-list
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      - in: query
+        name: description
+        type: string
+      - in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of Apps
+          schema:
+            $ref: '#/definitions/ApplicationPage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-get-list
+      tags:
+      - app-service
+    post:
+      consumes:
+      - application/json
+      description: app-service-create
+      parameters:
+      - description: Create App
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicationCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Role created successfully
+          schema:
+            $ref: '#/definitions/pg.Id'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-create
+      tags:
+      - app-service
+    put:
+      consumes:
+      - application/json
+      description: app-service-update
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update App
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicationUpdate'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-update
+      tags:
+      - app-service
+  /app/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: app-service-delete
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-delete
+      tags:
+      - app-service
+    get:
+      consumes:
+      - application/json
+      description: app-service-get-by-id
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Application retrieved successfully
+          schema:
+            $ref: '#/definitions/Application'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-get-by-id
+      tags:
+      - app-service
+  /app/search:
+    get:
+      consumes:
+      - application/json
+      description: app-service-search
+      parameters:
+      - in: query
+        name: description
+        type: string
+      - in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Search Results
+          schema:
+            items:
+              $ref: '#/definitions/Application'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-search
+      tags:
+      - app-service
   /role:
     get:
       consumes:
@@ -348,6 +576,9 @@ paths:
       - application/json
       description: role-service-search
       parameters:
+      - in: query
+        name: applicationId
+        type: integer
       - in: query
         name: name
         type: string

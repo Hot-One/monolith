@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Hot-One/monolith/config"
+	app_model "github.com/Hot-One/monolith/models/app"
 	role_model "github.com/Hot-One/monolith/models/role"
 	user_model "github.com/Hot-One/monolith/models/user"
 	"github.com/Hot-One/monolith/pkg/pg"
@@ -38,6 +39,7 @@ func Migrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		user_model.User{},
 		role_model.Role{},
+		app_model.Application{},
 	)
 }
 

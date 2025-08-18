@@ -39,10 +39,11 @@ func NewRoleService(strg storage.StorageInterface, config *config.Config, logger
 
 func (s *RoleService) Create(ctx context.Context, in *role_dto.RoleCreate) (int64, error) {
 	var model = role_model.Role{
-		Name:        in.Name,
-		Description: in.Description,
-		Pages:       in.Pages,
-		Permissions: in.Permissions,
+		Name:          in.Name,
+		Description:   in.Description,
+		Pages:         in.Pages,
+		Permissions:   in.Permissions,
+		ApplicationId: in.ApplicationId,
 	}
 
 	id, err := s.repo.Create(ctx, &model)
@@ -56,10 +57,11 @@ func (s *RoleService) Create(ctx context.Context, in *role_dto.RoleCreate) (int6
 
 func (s *RoleService) Update(ctx context.Context, in *role_dto.RoleUpdate) error {
 	var model = role_model.Role{
-		Name:        in.Name,
-		Description: in.Description,
-		Pages:       in.Pages,
-		Permissions: in.Permissions,
+		Name:          in.Name,
+		Description:   in.Description,
+		Pages:         in.Pages,
+		Permissions:   in.Permissions,
+		ApplicationId: in.ApplicationId,
 	}
 
 	var tx = func(tx *gorm.DB) *gorm.DB {
@@ -90,6 +92,11 @@ func (s *RoleService) Find(ctx context.Context, params *role_dto.RoleParams) ([]
 		if params.Name != "" {
 			tx = tx.Where("roles.name ILIKE ?", fmt.Sprintf("%%%s%%", params.Name))
 		}
+
+		if params.ApplicationId != 0 {
+			tx = tx.Where("roles.application_id = ?", params.ApplicationId)
+		}
+
 		return tx.Select("roles.*")
 	}
 
@@ -101,6 +108,11 @@ func (s *RoleService) Page(ctx context.Context, params *role_dto.RoleParams, pag
 		if params.Name != "" {
 			tx = tx.Where("roles.name ILIKE ?", fmt.Sprintf("%%%s%%", params.Name))
 		}
+
+		if params.ApplicationId != 0 {
+			tx = tx.Where("roles.application_id = ?", params.ApplicationId)
+		}
+
 		return tx.Select("roles.*")
 	}
 

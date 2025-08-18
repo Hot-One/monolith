@@ -15,6 +15,292 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/app": {
+            "get": {
+                "description": "app-service-get-list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "app-service"
+                ],
+                "summary": "app-service-get-list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "description",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of Apps",
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationPage"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "app-service-update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "app-service"
+                ],
+                "summary": "app-service-update",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update App",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "app-service-create",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "app-service"
+                ],
+                "summary": "app-service-create",
+                "parameters": [
+                    {
+                        "description": "Create App",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Role created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/pg.Id"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/search": {
+            "get": {
+                "description": "app-service-search",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "app-service"
+                ],
+                "summary": "app-service-search",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "description",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Search Results",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Application"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/{id}": {
+            "get": {
+                "description": "app-service-get-by-id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "app-service"
+                ],
+                "summary": "app-service-get-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Application retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/Application"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "app-service-delete",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "app-service"
+                ],
+                "summary": "app-service-delete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/role": {
             "get": {
                 "description": "role-service-getlist",
@@ -159,6 +445,11 @@ const docTemplate = `{
                 ],
                 "summary": "role-service-search",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "applicationId",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "name": "name",
@@ -701,9 +992,57 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "Application": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "ApplicationCreate": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ApplicationPage": {
+            "type": "object"
+        },
+        "ApplicationUpdate": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "Role": {
             "type": "object",
             "properties": {
+                "applicationId": {
+                    "type": "integer"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -720,11 +1059,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/pg.JsonObject"
                 },
                 "permissions": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                    }
+                    "$ref": "#/definitions/pg.JsonObject"
                 },
                 "updatedAt": {
                     "type": "string"
@@ -734,6 +1069,9 @@ const docTemplate = `{
         "RoleCreate": {
             "type": "object",
             "properties": {
+                "applicationId": {
+                    "type": "integer"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -744,17 +1082,16 @@ const docTemplate = `{
                     "$ref": "#/definitions/pg.JsonObject"
                 },
                 "permissions": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                    }
+                    "$ref": "#/definitions/pg.JsonObject"
                 }
             }
         },
         "RoleUpdate": {
             "type": "object",
             "properties": {
+                "applicationId": {
+                    "type": "integer"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -765,11 +1102,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/pg.JsonObject"
                 },
                 "permissions": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                    }
+                    "$ref": "#/definitions/pg.JsonObject"
                 }
             }
         },
@@ -890,6 +1223,26 @@ const docTemplate = `{
                 }
             }
         },
+        "app_model.Application": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "pg.Id": {
             "type": "object",
             "properties": {
@@ -905,6 +1258,12 @@ const docTemplate = `{
         "role_model.Role": {
             "type": "object",
             "properties": {
+                "application": {
+                    "$ref": "#/definitions/app_model.Application"
+                },
+                "applicationId": {
+                    "type": "integer"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -921,11 +1280,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/pg.JsonObject"
                 },
                 "permissions": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "additionalProperties": {}
-                    }
+                    "$ref": "#/definitions/pg.JsonObject"
                 },
                 "updatedAt": {
                     "type": "string"
