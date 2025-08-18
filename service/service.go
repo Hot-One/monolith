@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Hot-One/monolith/config"
 	"github.com/Hot-One/monolith/pkg/logger"
+	app_service "github.com/Hot-One/monolith/service/app"
 	role_service "github.com/Hot-One/monolith/service/role"
 	user_service "github.com/Hot-One/monolith/service/user"
 	"github.com/Hot-One/monolith/storage"
@@ -11,6 +12,7 @@ import (
 type ServiceInterface interface {
 	UserService() user_service.UserServiceInterface
 	RoleService() role_service.RoleServiceInterface
+	ApplicationService() app_service.ApplicationServiceInterface
 }
 
 type service struct {
@@ -35,4 +37,8 @@ func (s *service) UserService() user_service.UserServiceInterface {
 
 func (s *service) RoleService() role_service.RoleServiceInterface {
 	return role_service.NewRoleService(s.storage, s.cfg, s.log)
+}
+
+func (s *service) ApplicationService() app_service.ApplicationServiceInterface {
+	return app_service.NewApplicationService(s.storage, s.cfg, s.log)
 }
