@@ -44,19 +44,50 @@ func Migrate(db *gorm.DB) error {
 }
 
 func CreateSystemRows(strg storage.StorageInterface, routes []*static.Route) error {
-	var roles = []role_model.Role{}
+	ctx := context.Background()
+	var roles = make([]*role_model.Role, 0)
+
 	var routesMap = make(pg.JsonObject, len(routes))
 
 	for _, route := range routes {
 		routesMap[route.Path] = route.Method
 	}
 
-	for _, name := range static.Roles {
-		roles = append(roles, role_model.Role{
-			Name:        name,
-			Description: "This is system role",
-			Permissions: routesMap,
-		})
+	for name, slug := range static.Applications {
+		application, err := strg.ApplicationStorage().FindOne(ctx, func(tx *gorm.DB) *gorm.DB { return tx.Where("applications.slug = ?", slug) })
+		if err != nil {
+			if err.Error() == "record not found" {
+				model := &app_model.Application{
+					Name:        name,
+					Slug:        slug,
+					Description: fmt.Sprintf("This is the %s application", name),
+				}
+
+				id, err := strg.ApplicationStorage().Create(ctx, model)
+				if err != nil {
+					return fmt.Errorf("failed to create application %s: %w", name, err)
+				}
+
+				roles = append(roles, &role_model.Role{
+					Name:          static.AplicationRoles[name],
+					Description:   fmt.Sprintf("This is the %s role", static.AplicationRoles[name]),
+					Pages:         pg.JsonObject{},
+					Permissions:   routesMap,
+					ApplicationId: id,
+				})
+			} else {
+				return fmt.Errorf("failed to find application %s: %w", name, err)
+			}
+		} else {
+			// Application found, use its ID
+			roles = append(roles, &role_model.Role{
+				Name:          static.AplicationRoles[name],
+				Description:   fmt.Sprintf("This is the %s role", static.AplicationRoles[name]),
+				Pages:         pg.JsonObject{},
+				Permissions:   routesMap,
+				ApplicationId: application.Id,
+			})
+		}
 	}
 
 	return strg.RoleStorage().Upsert(context.Background(), roles)

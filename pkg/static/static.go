@@ -6,7 +6,15 @@ type Route struct {
 }
 
 var (
-	Roles = []string{
-		"DEFAULT ADMIN",
+	Applications = map[string]string{
+		"Admin panel": "admin_panel",
+		"Doctor app":  "doctor_app",
+		"Client app":  "client_app",
+	}
+
+	AplicationRoles = map[string]string{
+		"Admin panel": "Admin",
+		"Doctor app":  "Doctor",
+		"Client app":  "User",
 	}
 )

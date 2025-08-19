@@ -39,6 +39,7 @@ func NewApplicationService(strg storage.StorageInterface, config *config.Config,
 func (s *ApplicationService) Create(ctx context.Context, in *app_dto.ApplicationCreate) (int64, error) {
 	var model = app_model.Application{
 		Name:        in.Name,
+		Slug:        in.Slug,
 		Description: in.Description,
 	}
 
@@ -56,6 +57,7 @@ func (s *ApplicationService) Create(ctx context.Context, in *app_dto.Application
 func (s *ApplicationService) Update(ctx context.Context, in *app_dto.ApplicationUpdate) error {
 	var model = app_model.Application{
 		Name:        in.Name,
+		Slug:        in.Slug,
 		Description: in.Description,
 	}
 
@@ -75,11 +77,7 @@ func (s *ApplicationService) Update(ctx context.Context, in *app_dto.Application
 }
 
 func (s *ApplicationService) FindOne(ctx context.Context, id *pg.Id) (*app_dto.Application, error) {
-	filter := func(tx *gorm.DB) *gorm.DB {
-		return tx.Where("applications.id = ?", id)
-	}
-
-	return s.repo.FindOne(ctx, filter)
+	return s.repo.FindOne(ctx, func(tx *gorm.DB) *gorm.DB { return tx.Where("applications.id = ?", id) })
 }
 
 func (s *ApplicationService) Find(ctx context.Context, params *app_dto.ApplicationParams) ([]app_dto.Application, error) {
@@ -90,6 +88,10 @@ func (s *ApplicationService) Find(ctx context.Context, params *app_dto.Applicati
 
 		if params.Description != "" {
 			tx = tx.Where("applications.description ILIKE ?", "%"+params.Description+"%")
+		}
+
+		if params.Slug != "" {
+			tx = tx.Where("applications.slug ILIKE ?", "%"+params.Slug+"%")
 		}
 
 		return tx.Select("applications.*")
@@ -108,6 +110,10 @@ func (s *ApplicationService) Page(ctx context.Context, page, size int64, params 
 			tx = tx.Where("applications.description ILIKE ?", "%"+params.Description+"%")
 		}
 
+		if params.Slug != "" {
+			tx = tx.Where("applications.slug ILIKE ?", "%"+params.Slug+"%")
+		}
+
 		return tx.Select("applications.*")
 	}
 
@@ -115,9 +121,5 @@ func (s *ApplicationService) Page(ctx context.Context, page, size int64, params 
 }
 
 func (s *ApplicationService) Delete(ctx context.Context, id *pg.Id) error {
-	var filter = func(tx *gorm.DB) *gorm.DB {
-		return tx.Where("applications.id = ?", id)
-	}
-
-	return s.repo.Delete(ctx, filter)
+	return s.repo.Delete(ctx, func(tx *gorm.DB) *gorm.DB { return tx.Where("applications.id = ?", id) })
 }

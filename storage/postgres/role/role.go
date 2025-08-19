@@ -37,7 +37,7 @@ func (r *Role) Update(ctx context.Context, in *role_model.Role, tx pg.Filter) er
 	return nil
 }
 
-func (r *Role) Upsert(ctx context.Context, in []role_model.Role) error {
+func (r *Role) Upsert(ctx context.Context, in []*role_model.Role) error {
 	return pg.Transaction(
 		r.db.WithContext(ctx),
 		func(tx *gorm.DB) error {
@@ -45,7 +45,7 @@ func (r *Role) Upsert(ctx context.Context, in []role_model.Role) error {
 				Clauses(
 					clause.OnConflict{
 						Columns:   []clause.Column{{Name: "name"}},
-						DoUpdates: clause.AssignmentColumns([]string{"name", "description", "permissions"}),
+						DoUpdates: clause.AssignmentColumns([]string{"name", "description", "permissions", "pages", "application_id"}),
 					},
 				).
 				Create(&in)

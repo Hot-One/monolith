@@ -7,6 +7,7 @@ type ApplicationPage = pg.PageData[Application] // @name ApplicationPage
 type Application struct {
 	Id          int64  `json:"id"`
 	Name        string `json:"name"`
+	Slug        string `json:"slug"`
 	Description string `json:"description"`
 	CreatedAt   string `json:"createdAt"`
 	UpdatedAt   string `json:"updatedAt"`
@@ -14,16 +15,19 @@ type Application struct {
 
 type ApplicationCreate struct {
 	Name        string `json:"name"`
+	Slug        string `json:"slug"`
 	Description string `json:"description"`
 } // @name ApplicationCreate
 
 type ApplicationUpdate struct {
 	Id          int64  `json:"id" swaggerignore:"true"`
 	Name        string `json:"name"`
+	Slug        string `json:"slug"`
 	Description string `json:"description"`
 } // @name ApplicationUpdate
 
 type ApplicationParams struct {
 	Name        string `json:"name"`
+	Slug        string `json:"slug"`
 	Description string `json:"description"`
 } // @name ApplicationParams
