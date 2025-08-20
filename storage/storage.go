@@ -3,10 +3,16 @@ package storage
 import (
 	app_storage "github.com/Hot-One/monolith/storage/postgres/app"
 	role_storage "github.com/Hot-One/monolith/storage/postgres/role"
+	session_storage "github.com/Hot-One/monolith/storage/postgres/session"
 	user_storage "github.com/Hot-One/monolith/storage/postgres/user"
+
+	//
 	app_repo "github.com/Hot-One/monolith/storage/repo/app"
 	role_repo "github.com/Hot-One/monolith/storage/repo/role"
+	session_repo "github.com/Hot-One/monolith/storage/repo/session"
 	user_repo "github.com/Hot-One/monolith/storage/repo/user"
+
+	//
 	"gorm.io/gorm"
 )
 
@@ -16,6 +22,7 @@ type StorageInterface interface {
 	UserStorage() user_repo.UserInterface
 	RoleStorage() role_repo.RoleInterface
 	ApplicationStorage() app_repo.ApplicationInterface
+	SessionStorage() session_repo.SessionInterface
 }
 
 type storage struct {
@@ -24,6 +31,7 @@ type storage struct {
 	userStorage        user_repo.UserInterface
 	roleStorage        role_repo.RoleInterface
 	applicationStorage app_repo.ApplicationInterface
+	sessionStorage     session_repo.SessionInterface
 }
 
 func NewStorage(db *gorm.DB) StorageInterface {
@@ -63,4 +71,12 @@ func (s *storage) ApplicationStorage() app_repo.ApplicationInterface {
 	}
 
 	return s.applicationStorage
+}
+
+func (s *storage) SessionStorage() session_repo.SessionInterface {
+	if s.sessionStorage == nil {
+		s.sessionStorage = session_storage.NewSession(s.db)
+	}
+
+	return s.sessionStorage
 }
