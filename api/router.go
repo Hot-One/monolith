@@ -51,14 +51,6 @@ func SetUpRouter(option *Router) *gin.Engine {
 	role_handler.NewRoleHandler(v1, option.Srvc, option.Cfg, option.Log)
 	app_handler.NewAppHandler(v1, option.Srvc, option.Cfg, option.Log)
 
-	// routes := r.Routes()
-	// for _, route := range routes {
-	// 	option.Routes = append(option.Routes, &static.Route{
-	// 		Method: route.Method,
-	// 		Path:   route.Path,
-	// 	})
-	// }
-
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	return r
