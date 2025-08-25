@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/Hot-One/monolith/api/docs"
-	"github.com/Hot-One/monolith/api/handler"
 	app_handler "github.com/Hot-One/monolith/api/handler/app"
 	role_handler "github.com/Hot-One/monolith/api/handler/role"
 	session_handler "github.com/Hot-One/monolith/api/handler/session"
@@ -34,19 +33,12 @@ func SetUpRouter(option *Router) *gin.Engine {
 	docs.SwaggerInfo.Title = option.Cfg.ServiceName
 	docs.SwaggerInfo.Schemes = []string{option.Cfg.HTTPScheme}
 
-	var (
-		r        = gin.Default()
-		handlers = handler.NewHandler(option.Srvc, option.Cfg, option.Log)
-	)
+	var r = gin.Default()
+	var url = ginSwagger.URL("/swagger/doc.json")
 
 	r.Use(gin.Recovery(), gin.Logger(), customCORSMiddleware())
 
-	url := ginSwagger.URL("/swagger/doc.json")
-
-	v1 := r.Group("/v1", handlers.Ping)
-	{
-		v1.GET("/ping")
-	}
+	var v1 = r.Group("/v1")
 
 	user_handler.NewUserHandler(v1, option.Srvc, option.Cfg, option.Log)
 	role_handler.NewRoleHandler(v1, option.Srvc, option.Cfg, option.Log)
