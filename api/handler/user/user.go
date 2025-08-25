@@ -99,7 +99,7 @@ func (h *userHandler) Update(c *gin.Context) {
 
 	in.Id = id
 
-	if err := h.srvc.Update(c.Request.Context(), &in); err != nil {
+	if err = h.srvc.Update(c.Request.Context(), &in); err != nil {
 		statushttp.InternalServerError(c, err.Error())
 		return
 	}
