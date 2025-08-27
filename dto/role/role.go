@@ -33,6 +33,6 @@ type RoleUpdate struct {
 } // @name RoleUpdate
 
 type RoleParams struct {
-	Name          string `json:"name"`
-	ApplicationId int64  `json:"applicationId"`
+	Name          string `json:"name" form:"name"`
+	ApplicationId int64  `json:"applicationId" form:"applicationId"`
 } // @name RoleParams

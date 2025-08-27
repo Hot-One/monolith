@@ -4,7 +4,7 @@ run:
 swag-install:
 	go install github.com/swaggo/swag/cmd/swag@latest
 
-swag-gen:
+swag_init:
 	@if ! command -v swag >/dev/null 2>&1; then \
 		echo "Installing swag..."; \
 		go install github.com/swaggo/swag/cmd/swag@latest; \

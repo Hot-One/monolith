@@ -31,7 +31,7 @@ type ApplicationUpdate struct {
 } // @name ApplicationUpdate
 
 type ApplicationParams struct {
-	Name        string `json:"name"`
-	Slug        string `json:"slug"`
-	Description string `json:"description"`
+	Name        string `json:"name" form:"name"`
+	Slug        string `json:"slug" form:"slug"`
+	Description string `json:"description" form:"description"`
 } // @name ApplicationParams

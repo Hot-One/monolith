@@ -78,7 +78,7 @@ func (h *userHandler) Create(c *gin.Context) {
 // @Success 		204
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
-// @Router 			/user/{id} [put]
+// @Router 			/user/{id} [patch]
 func (h *userHandler) Update(c *gin.Context) {
 	var in user_dto.UserUpdate
 

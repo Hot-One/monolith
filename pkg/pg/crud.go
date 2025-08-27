@@ -76,7 +76,7 @@ func Delete[T any](db *gorm.DB, entity *T, filter Filter, columns ...string) err
 		entity = new(T)
 	}
 
-	result := query[T](tx, filter).Delete(entity)
+	var result = query[T](tx, filter).Delete(entity)
 	{
 		if err := result.Error; err != nil {
 			return err
@@ -143,8 +143,8 @@ func PageWithScan[T any, E any](db *gorm.DB, offset, limit int64, filter ...Filt
 }
 
 func page[T any, E any](db *gorm.DB, page, limit int64, filter ...Filter) *gorm.DB {
-	totalFilter := func(tx *gorm.DB) *gorm.DB {
-		selects := tx.Statement.Selects
+	var totalFilter = func(tx *gorm.DB) *gorm.DB {
+		var selects = tx.Statement.Selects
 		{
 			if len(selects) == 0 {
 				selects = []string{
@@ -164,16 +164,16 @@ func page[T any, E any](db *gorm.DB, page, limit int64, filter ...Filter) *gorm.
 		return tx
 	}
 
-	tx := query[T](db, append(filter, totalFilter)...)
-	offset := (page - 1) * limit
+	var (
+		tx     = query[T](db, append(filter, totalFilter)...)
+		offset = (page - 1) * limit
+	)
 
 	return tx.Offset(int(offset)).Limit(int(limit))
 }
 
 func pageResult[T any](pageEntities []pageEntity[T]) *PageData[T] {
-	var (
-		total int64
-	)
+	var total int64
 
 	if len(pageEntities) > 0 {
 		var pageEntity = pageEntities[0]
@@ -181,7 +181,7 @@ func pageResult[T any](pageEntities []pageEntity[T]) *PageData[T] {
 		total = pageEntity.Total
 	}
 
-	entities := make([]T, 0, len(pageEntities))
+	var entities = make([]T, 0, len(pageEntities))
 	{
 		for _, pageEntity := range pageEntities {
 			entities = append(entities, pageEntity.Data)

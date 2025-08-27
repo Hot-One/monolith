@@ -1,6 +1,8 @@
 package app_handler
 
 import (
+	"fmt"
+
 	statushttp "github.com/Hot-One/monolith/api/status_http"
 	"github.com/Hot-One/monolith/config"
 	app_dto "github.com/Hot-One/monolith/dto/app"
@@ -27,7 +29,7 @@ func NewAppHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *c
 	app := group.Group("/app")
 	{
 		app.POST("/create", handler.Create)
-		app.PUT("/:id", handler.Update)
+		app.PATCH("/:id", handler.Update)
 		app.GET("/page", handler.GetList)
 		app.GET("/search", handler.Search)
 		app.GET("/:id", handler.GetById)
@@ -78,7 +80,7 @@ func (h *appHandler) Create(c *gin.Context) {
 // @Success 		204
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
-// @Router    		/app/{id} [put]
+// @Router    		/app/{id} [patch]
 func (h *appHandler) Update(c *gin.Context) {
 	id, err := statushttp.GetId(c)
 	{
@@ -166,6 +168,8 @@ func (h *appHandler) Search(c *gin.Context) {
 			return
 		}
 	}
+
+	fmt.Printf("input: %+v\n", in)
 
 	items, err := h.srvc.Find(c.Request.Context(), &in)
 	{

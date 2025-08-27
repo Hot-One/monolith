@@ -60,11 +60,11 @@ type UserUpdateWhithoutRelations struct {
 }
 
 type UserParams struct {
-	Username   string `json:"username"`
-	Password   string `json:"password"`
-	Phone      string `json:"phone"`
-	Email      string `json:"email"`
-	FirstName  string `json:"first_name"`
-	LastName   string `json:"last_name"`
-	MiddleName string `json:"middle_name"`
+	Username   string `json:"username" form:"username"`
+	Password   string `json:"password" form:"password"`
+	Phone      string `json:"phone" form:"phone"`
+	Email      string `json:"email" form:"email"`
+	FirstName  string `json:"first_name" form:"first_name"`
+	LastName   string `json:"last_name" form:"last_name"`
+	MiddleName string `json:"middle_name" form:"middle_name"`
 } // @name UserParams

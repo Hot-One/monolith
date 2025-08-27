@@ -64,7 +64,7 @@ func (h *roleHandler) Create(c *gin.Context) {
 		}
 	}
 
-	statushttp.Created(c, id)
+	statushttp.Created(c, pg.Id{Id: id})
 }
 
 // Update 			godoc
@@ -75,10 +75,10 @@ func (h *roleHandler) Create(c *gin.Context) {
 // @Produce	    	json
 // @Param 			id path int64 true "Id"
 // @Param			input body role_dto.RoleUpdate true "Role Update"
-// @Success	204
-// @Failure	400 	{object} statushttp.Response "Bad Request"
-// @Failure	500 	{object} statushttp.Response "Internal Server Error"
-// @Router			/role/{id} [put]
+// @Success			204
+// @Failure			400 {object} statushttp.Response "Bad Request"
+// @Failure			500 {object} statushttp.Response "Internal Server Error"
+// @Router			/role/{id} [patch]
 func (h *roleHandler) Update(c *gin.Context) {
 	id, err := statushttp.GetId(c)
 	{
@@ -114,7 +114,7 @@ func (h *roleHandler) Update(c *gin.Context) {
 // @Produce    		json
 // @Param			page query int true "Page number"
 // @Param			limit query int true "Page size"
-// @Param 			input query user_dto.UserParams false "Filter parameters"
+// @Param 			input query role_dto.RoleParams false "Filter parameters"
 // @Success    		200 {object} role_dto.Role "Role List"
 // @Failure    		400 {object} statushttp.Response "Bad Request"
 // @Failure    		500 {object} statushttp.Response "Internal Server Error"
@@ -138,9 +138,11 @@ func (h *roleHandler) GetList(c *gin.Context) {
 	}
 
 	items, err := h.srvc.Page(c.Request.Context(), &in, page, limit)
-	if err != nil {
-		statushttp.InternalServerError(c, err.Error())
-		return
+	{
+		if err != nil {
+			statushttp.InternalServerError(c, err.Error())
+			return
+		}
 	}
 
 	statushttp.OK(c, items)

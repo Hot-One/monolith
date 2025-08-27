@@ -77,7 +77,7 @@ func (s *ApplicationService) Update(ctx context.Context, in *app_dto.Application
 }
 
 func (s *ApplicationService) FindOne(ctx context.Context, id *pg.Id) (*app_dto.Application, error) {
-	return s.repo.FindOne(ctx, func(tx *gorm.DB) *gorm.DB { return tx.Where("applications.id = ?", id) })
+	return s.repo.FindOne(ctx, func(tx *gorm.DB) *gorm.DB { return tx.Where("applications.id = ?", id.Id) })
 }
 
 func (s *ApplicationService) Find(ctx context.Context, params *app_dto.ApplicationParams) ([]app_dto.Application, error) {
@@ -121,5 +121,5 @@ func (s *ApplicationService) Page(ctx context.Context, page, size int64, params 
 }
 
 func (s *ApplicationService) Delete(ctx context.Context, id *pg.Id) error {
-	return s.repo.Delete(ctx, func(tx *gorm.DB) *gorm.DB { return tx.Where("applications.id = ?", id) })
+	return s.repo.Delete(ctx, func(tx *gorm.DB) *gorm.DB { return tx.Where("applications.id = ?", id.Id) })
 }

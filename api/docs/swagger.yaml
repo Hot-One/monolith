@@ -318,7 +318,7 @@ paths:
       summary: app-service-get-by-id
       tags:
       - app-service
-    put:
+    patch:
       consumes:
       - application/json
       description: app-service-update
@@ -475,25 +475,10 @@ paths:
         required: true
         type: integer
       - in: query
-        name: email
-        type: string
+        name: applicationId
+        type: integer
       - in: query
-        name: first_name
-        type: string
-      - in: query
-        name: last_name
-        type: string
-      - in: query
-        name: middle_name
-        type: string
-      - in: query
-        name: password
-        type: string
-      - in: query
-        name: phone
-        type: string
-      - in: query
-        name: username
+        name: name
         type: string
       produces:
       - application/json
@@ -599,7 +584,7 @@ paths:
       summary: role-service-getbyid
       tags:
       - Role Service
-    put:
+    patch:
       consumes:
       - application/json
       description: role-service-update
@@ -999,7 +984,7 @@ paths:
       summary: user-service-get-by-id
       tags:
       - User Service
-    put:
+    patch:
       consumes:
       - application/json
       description: user-service-update
