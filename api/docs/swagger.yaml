@@ -10,6 +10,8 @@ definitions:
         type: integer
       name:
         type: string
+      slug:
+        type: string
       updatedAt:
         type: string
     type: object
@@ -19,6 +21,8 @@ definitions:
         type: string
       name:
         type: string
+      slug:
+        type: string
     type: object
   ApplicationPage:
     type: object
@@ -27,6 +31,8 @@ definitions:
       description:
         type: string
       name:
+        type: string
+      slug:
         type: string
     type: object
   Role:
@@ -73,6 +79,53 @@ definitions:
         $ref: '#/definitions/pg.JsonObject'
       permissions:
         $ref: '#/definitions/pg.JsonObject'
+    type: object
+  Session:
+    properties:
+      applicationId:
+        type: integer
+      createdAt:
+        type: string
+      expiresAt:
+        type: string
+      id:
+        type: integer
+      refreshAt:
+        type: string
+      roleId:
+        type: integer
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
+  SessionCreate:
+    properties:
+      applicationId:
+        type: integer
+      expiresAt:
+        type: string
+      refreshAt:
+        type: string
+      roleId:
+        type: integer
+      userId:
+        type: integer
+    type: object
+  SessionPage:
+    type: object
+  SessionUpdate:
+    properties:
+      applicationId:
+        type: integer
+      expiresAt:
+        type: string
+      refreshAt:
+        type: string
+      roleId:
+        type: integer
+      userId:
+        type: integer
     type: object
   User:
     properties:
@@ -162,6 +215,8 @@ definitions:
         type: integer
       name:
         type: string
+      slug:
+        type: string
       updatedAt:
         type: string
     type: object
@@ -208,107 +263,6 @@ info:
   title: Monolith API
   version: "1.0"
 paths:
-  /app:
-    get:
-      consumes:
-      - application/json
-      description: app-service-get-list
-      parameters:
-      - default: 1
-        description: Page number
-        in: query
-        name: page
-        type: integer
-      - default: 10
-        description: Number of items per page
-        in: query
-        name: limit
-        type: integer
-      - in: query
-        name: description
-        type: string
-      - in: query
-        name: name
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of Apps
-          schema:
-            $ref: '#/definitions/ApplicationPage'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-      summary: app-service-get-list
-      tags:
-      - app-service
-    post:
-      consumes:
-      - application/json
-      description: app-service-create
-      parameters:
-      - description: Create App
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/ApplicationCreate'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Role created successfully
-          schema:
-            $ref: '#/definitions/pg.Id'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-      summary: app-service-create
-      tags:
-      - app-service
-    put:
-      consumes:
-      - application/json
-      description: app-service-update
-      parameters:
-      - description: Id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Update App
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/ApplicationUpdate'
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-      summary: app-service-update
-      tags:
-      - app-service
   /app/{id}:
     delete:
       consumes:
@@ -364,6 +318,111 @@ paths:
       summary: app-service-get-by-id
       tags:
       - app-service
+    put:
+      consumes:
+      - application/json
+      description: app-service-update
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update App
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicationUpdate'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-update
+      tags:
+      - app-service
+  /app/create:
+    post:
+      consumes:
+      - application/json
+      description: app-service-create
+      parameters:
+      - description: Create App
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicationCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Role created successfully
+          schema:
+            $ref: '#/definitions/pg.Id'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-create
+      tags:
+      - app-service
+  /app/page:
+    get:
+      consumes:
+      - application/json
+      description: app-service-get-list
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      - in: query
+        name: description
+        type: string
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: slug
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of Apps
+          schema:
+            $ref: '#/definitions/ApplicationPage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: app-service-get-list
+      tags:
+      - app-service
   /app/search:
     get:
       consumes:
@@ -375,6 +434,9 @@ paths:
         type: string
       - in: query
         name: name
+        type: string
+      - in: query
+        name: slug
         type: string
       produces:
       - application/json
@@ -602,6 +664,200 @@ paths:
       summary: role-service-search
       tags:
       - Role Service
+  /session:
+    get:
+      consumes:
+      - application/json
+      description: session-service-get-list
+      parameters:
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      - in: query
+        name: applicationId
+        type: integer
+      - in: query
+        name: roleId
+        type: integer
+      - in: query
+        name: userId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session List
+          schema:
+            $ref: '#/definitions/SessionPage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: session-service-get-list
+      tags:
+      - Session Service
+    post:
+      consumes:
+      - application/json
+      description: session-service-create
+      parameters:
+      - description: Session Create
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/SessionCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Session created successfully
+          schema:
+            $ref: '#/definitions/pg.Id'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: session-service-create
+      tags:
+      - Session Service
+  /session/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: session-service-delete
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: session-service-delete
+      tags:
+      - Session Service
+    get:
+      consumes:
+      - application/json
+      description: session-service-get-by-id
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session retrieved successfully
+          schema:
+            $ref: '#/definitions/Session'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: session-service-get-by-id
+      tags:
+      - Session Service
+    patch:
+      consumes:
+      - application/json
+      description: session-service-update
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Session Update
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/SessionUpdate'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: session-service-update
+      tags:
+      - Session Service
+  /session/search:
+    get:
+      consumes:
+      - application/json
+      description: session-service-search
+      parameters:
+      - in: query
+        name: applicationId
+        type: integer
+      - in: query
+        name: roleId
+        type: integer
+      - in: query
+        name: userId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session list retrieved successfully
+          schema:
+            items:
+              $ref: '#/definitions/Session'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: session-service-search
+      tags:
+      - Session Service
   /user:
     get:
       consumes:
@@ -823,30 +1079,6 @@ paths:
       summary: user-service-search
       tags:
       - User Service
-  /v1/ping:
-    get:
-      consumes:
-      - application/json
-      description: Ping service to check if it's running
-      operationId: ping
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Service is running
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/statushttp.Response'
-      summary: Ping service to check if it's running
-      tags:
-      - Service
 securityDefinitions:
   BearerAuth:
     in: header

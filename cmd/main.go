@@ -9,6 +9,7 @@ import (
 	"github.com/Hot-One/monolith/service"
 	"github.com/Hot-One/monolith/storage"
 	"github.com/gin-gonic/gin"
+	gormLog "gorm.io/gorm/logger"
 )
 
 func main() {
@@ -18,6 +19,7 @@ func main() {
 
 		gormConfig = &postgresConn.GormConfig{
 			SkipDefaultTransaction: true,
+			Logger:                 gormLog.Default.LogMode(gormLog.Info),
 		}
 	)
 

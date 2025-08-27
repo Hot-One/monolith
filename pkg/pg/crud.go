@@ -1,6 +1,13 @@
 package pg
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
+
+type pageEntity[T any] struct {
+	Total int64
+	Data  T `gorm:"embedded"`
+}
 
 func query[T any](db *gorm.DB, filter ...Filter) *gorm.DB {
 	return db.Model(new(T)).Scopes(filter...)
@@ -121,25 +128,68 @@ func FindWithScan[T any, E any](db *gorm.DB, filter ...Filter) ([]E, error) {
 	return entites, nil
 }
 
-func PageWithScan[T any, E any](db *gorm.DB, page int64, size int64, filter ...Filter) (*PageData[E], error) {
-	var entites []E
-	var total int64
+func PageWithScan[T any, E any](db *gorm.DB, offset, limit int64, filter ...Filter) (*PageData[E], error) {
+	var pageEntities []pageEntity[E]
 	{
-		result := query[T](db, filter...).Count(&total).Offset(int((page - 1) * size)).Limit(int(size)).Scan(&entites)
+		result := page[T, E](db, offset, limit, filter...).
+			Scan(&pageEntities)
+
+		if err := result.Error; err != nil {
+			return nil, err
+		}
+	}
+
+	return pageResult(pageEntities), nil
+}
+
+func page[T any, E any](db *gorm.DB, page, limit int64, filter ...Filter) *gorm.DB {
+	totalFilter := func(tx *gorm.DB) *gorm.DB {
+		selects := tx.Statement.Selects
 		{
-			if err := result.Error; err != nil {
-				return &PageData[E]{}, err
+			if len(selects) == 0 {
+				selects = []string{
+					"*",
+					"COUNT(1) OVER() AS total",
+				}
+			} else {
+				selects = append(
+					selects,
+					"COUNT(1) OVER() AS total",
+				)
 			}
 		}
 
+		tx.Statement.Selects = selects
+
+		return tx
 	}
 
-	if entites == nil {
-		entites = []E{}
+	tx := query[T](db, append(filter, totalFilter)...)
+	offset := (page - 1) * limit
+
+	return tx.Offset(int(offset)).Limit(int(limit))
+}
+
+func pageResult[T any](pageEntities []pageEntity[T]) *PageData[T] {
+	var (
+		total int64
+	)
+
+	if len(pageEntities) > 0 {
+		var pageEntity = pageEntities[0]
+
+		total = pageEntity.Total
 	}
 
-	return &PageData[E]{
+	entities := make([]T, 0, len(pageEntities))
+	{
+		for _, pageEntity := range pageEntities {
+			entities = append(entities, pageEntity.Data)
+		}
+	}
+
+	return &PageData[T]{
 		Total: total,
-		Data:  entites,
-	}, nil
+		Data:  entities,
+	}
 }

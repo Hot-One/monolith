@@ -26,7 +26,12 @@ func NewAppHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *c
 
 	app := group.Group("/app")
 	{
-		app.POST("", handler.Create)
+		app.POST("/create", handler.Create)
+		app.PUT("/:id", handler.Update)
+		app.GET("/page", handler.GetList)
+		app.GET("/search", handler.Search)
+		app.GET("/:id", handler.GetById)
+		app.DELETE("/:id", handler.Delete)
 	}
 
 }
@@ -41,7 +46,7 @@ func NewAppHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *c
 // @Success 		201 {object} pg.Id "Role created successfully"
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
-// @Router    		/app [post]
+// @Router    		/app/create [post]
 func (h *appHandler) Create(c *gin.Context) {
 	var in app_dto.ApplicationCreate
 	{
@@ -73,7 +78,7 @@ func (h *appHandler) Create(c *gin.Context) {
 // @Success 		204
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
-// @Router    		/app [put]
+// @Router    		/app/{id} [put]
 func (h *appHandler) Update(c *gin.Context) {
 	id, err := statushttp.GetId(c)
 	{
@@ -113,7 +118,7 @@ func (h *appHandler) Update(c *gin.Context) {
 // @Success 		200 {object} app_dto.ApplicationPage "List of Apps"
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
-// @Router    		/app [get]
+// @Router    		/app/page [get]
 func (h *appHandler) GetList(c *gin.Context) {
 	var in app_dto.ApplicationParams
 	{
