@@ -18,6 +18,7 @@ import (
 
 type AuthServiceInterface interface {
 	Login(ctx context.Context, input *auth_dto.LoginRequest) (*auth_dto.LoginResponse, error)
+	Refresh(ctx context.Context, token string) (*auth_dto.LoginResponse, error)
 	Logout(ctx context.Context, token string) error
 }
 
@@ -148,4 +149,82 @@ func (s *AuthService) Logout(ctx context.Context, token string) error {
 	}
 
 	return nil
+}
+
+func (s *AuthService) Refresh(ctx context.Context, token string) (*auth_dto.LoginResponse, error) {
+	parsedToken, err := jwt.ParseWithClaims(token, jwt.MapClaims{},
+		func(token *jwt.Token) (any, error) {
+			return []byte(s.cfg.JWTSecret), nil
+		},
+	)
+	{
+		if err != nil {
+			s.log.Error("Failed to parse token", logger.Error(err))
+			return nil, err
+		}
+	}
+
+	var id = cast.ToInt(parsedToken.Claims.(jwt.MapClaims)["Id"])
+	var filter = func(tx *gorm.DB) *gorm.DB {
+		return tx.Where("id = ?", id)
+	}
+
+	session, err := s.srtg.SessionStorage().FindOne(ctx, filter)
+	{
+		if err != nil {
+			s.log.Error("Failed to find session", logger.Error(err))
+			return nil, err
+		}
+	}
+
+	if session.RefreshAt.Before(time.Now()) {
+		s.log.Error("Session expired", logger.Int("session_id", id))
+		return nil, errors.New("session expired")
+	}
+
+	expiresAt := time.Now().Add(time.Hour * 24)
+	refreshAt := time.Now().Add(time.Hour * 24 * 7)
+
+	err = s.srtg.SessionStorage().Update(ctx,
+		&session_model.Session{
+			Id:        session.Id,
+			ExpiresAt: expiresAt,
+			RefreshAt: refreshAt,
+		}, filter,
+	)
+	{
+		if err != nil {
+			s.log.Error("Failed to update session", logger.Error(err))
+			return nil, err
+		}
+	}
+
+	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256,
+		jwt.MapClaims{
+			"Id":             session.Id,
+			"exp":            expiresAt,
+			"iat":            time.Now().Unix(),
+			"nbf":            time.Now().Unix(),
+			"user_id":        session.UserId,
+			"role_id":        session.RoleId,
+			"application_id": session.ApplicationId,
+		},
+	)
+
+	tokenString, err := newToken.SignedString([]byte(s.cfg.JWTSecret))
+	{
+		if err != nil {
+			s.log.Error("Failed to sign token", logger.Error(err))
+			return nil, err
+		}
+	}
+
+	return &auth_dto.LoginResponse{
+		Token:         tokenString,
+		UserId:        session.UserId,
+		RoleId:        session.RoleId,
+		ApplicationId: session.ApplicationId,
+		ExpiresAt:     expiresAt,
+		RefreshAt:     refreshAt,
+	}, nil
 }

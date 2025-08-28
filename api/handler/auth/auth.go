@@ -92,3 +92,34 @@ func (h *authHandler) Logout(c *gin.Context) {
 
 	statushttp.NoContent(c)
 }
+
+// Refresh 			godoc
+// @Summary      	Refresh Token
+// @Description 	Refresh Token
+// @Tags         	Auth Service
+// @Accept       	json
+// @Produce      	json
+// @Param 			Authorization header string true "Bearer {token}"
+// @Success 		200 {object} auth_dto.LoginResponse "Token refreshed successfully"
+// @Failure 		400 {object} statushttp.Response "Bad Request"
+// @Failure 		500 {object} statushttp.Response "Internal Server Error"
+// @Router       	/auth/refresh [post]
+func (h *authHandler) Refresh(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	{
+		if len(strings.Split(token, " ")) != 2 && strings.Split(token, " ")[0] != "Bearer" {
+			statushttp.Unauthorized(c, "invalid token")
+			return
+		}
+	}
+
+	newToken, err := h.srvc.AuthService().Refresh(c.Request.Context(), strings.Split(token, " ")[1])
+	{
+		if err != nil {
+			statushttp.InternalServerError(c, err.Error())
+			return
+		}
+	}
+
+	statushttp.OK(c, newToken)
+}
