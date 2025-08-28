@@ -9,6 +9,7 @@ import (
 	user_model "github.com/Hot-One/monolith/models/user"
 	"github.com/Hot-One/monolith/pkg/logger"
 	"github.com/Hot-One/monolith/pkg/pg"
+	"github.com/Hot-One/monolith/pkg/security"
 	"github.com/Hot-One/monolith/storage"
 	user_repo "github.com/Hot-One/monolith/storage/repo/user"
 	"gorm.io/gorm"
@@ -50,6 +51,16 @@ func (s *UserService) Create(ctx context.Context, in *user_dto.UserCreate) (int6
 		Roles:      in.Roles,
 	}
 
+	hashed, err := security.HashPassword(model.Password)
+	{
+		if err != nil {
+			s.log.Error("Service: UserService: Create: error while hashing password", logger.Error(err))
+			return 0, err
+		}
+	}
+
+	model.Password = hashed
+
 	id, err := s.repo.Create(ctx, &model)
 	{
 		if err != nil {
@@ -73,7 +84,17 @@ func (s *UserService) Update(ctx context.Context, in *user_dto.UserUpdate) error
 		Gender:     in.Gender,
 	}
 
-	
+	if len(model.Password) != 60 {
+		hashed, err := security.HashPassword(model.Password)
+		{
+			if err != nil {
+				s.log.Error("Service: UserService: Update: error while hashing password", logger.Error(err))
+				return err
+			}
+		}
+
+		model.Password = hashed
+	}
 
 	var tx = func(tx *gorm.DB) *gorm.DB {
 		return tx.Where("users.id = ?", in.Id)

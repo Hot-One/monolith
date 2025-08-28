@@ -3,6 +3,7 @@ package user_storage
 import (
 	"context"
 
+	auth_dto "github.com/Hot-One/monolith/dto/auth"
 	user_dto "github.com/Hot-One/monolith/dto/user"
 	user_model "github.com/Hot-One/monolith/models/user"
 	"github.com/Hot-One/monolith/pkg/pg"
@@ -72,6 +73,10 @@ func (u *User) Update(ctx context.Context, in *user_model.User, filter pg.Filter
 
 func (u *User) FindOne(ctx context.Context, filter pg.Filter) (*user_dto.User, error) {
 	return pg.FindOneWithScan[user_model.User, user_dto.User](u.db.WithContext(ctx), filter)
+}
+
+func (u *User) FindOneAuth(ctx context.Context, filter pg.Filter) (*auth_dto.User, error) {
+	return pg.FindOneWithScan[user_model.User, auth_dto.User](u.db.WithContext(ctx), filter)
 }
 
 func (u *User) Find(ctx context.Context, filter pg.Filter) ([]user_dto.User, error) {

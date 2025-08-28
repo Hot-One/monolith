@@ -7,6 +7,7 @@ import (
 	"github.com/Hot-One/monolith/config"
 	app_model "github.com/Hot-One/monolith/models/app"
 	role_model "github.com/Hot-One/monolith/models/role"
+	session_model "github.com/Hot-One/monolith/models/session"
 	user_model "github.com/Hot-One/monolith/models/user"
 	"github.com/Hot-One/monolith/pkg/pg"
 	"github.com/Hot-One/monolith/pkg/static"
@@ -40,6 +41,7 @@ func Migrate(db *gorm.DB) error {
 		user_model.User{},
 		role_model.Role{},
 		app_model.Application{},
+		session_model.Session{},
 	)
 }
 

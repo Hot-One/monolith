@@ -6,6 +6,7 @@ import (
 	user_dto "github.com/Hot-One/monolith/dto/user"
 	"github.com/Hot-One/monolith/pkg/logger"
 	"github.com/Hot-One/monolith/pkg/pg"
+	"github.com/Hot-One/monolith/pkg/utils"
 	"github.com/Hot-One/monolith/service"
 	user_service "github.com/Hot-One/monolith/service/user"
 	"github.com/gin-gonic/gin"
@@ -47,16 +48,28 @@ func NewUserHandler(group *gin.RouterGroup, srvc service.ServiceInterface, confi
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
 // @Router 			/user [post]
 func (h *userHandler) Create(c *gin.Context) {
-	var in user_dto.UserCreate
+	var input user_dto.UserCreate
 
 	{
-		if err := c.ShouldBindJSON(&in); err != nil {
+		if err := c.ShouldBindJSON(&input); err != nil {
 			statushttp.BadRequest(c, err.Error())
 			return
 		}
 	}
 
-	id, err := h.srvc.Create(c.Request.Context(), &in)
+	{
+		if !utils.IsValidLogin(input.Username) {
+			statushttp.BadRequest(c, "invalid username")
+			return
+		}
+
+		if !utils.IsValidPassword(input.Password) {
+			statushttp.BadRequest(c, "invalid password")
+			return
+		}
+	}
+
+	id, err := h.srvc.Create(c.Request.Context(), &input)
 	{
 		if err != nil {
 			statushttp.InternalServerError(c, err.Error())

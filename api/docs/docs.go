@@ -313,6 +313,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/login": {
+            "post": {
+                "description": "Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth Service"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Login Request",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth_dto.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/role": {
             "get": {
                 "description": "role-service-getlist",
@@ -1464,6 +1510,17 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
+                "role": {
+                    "description": "@name UserRole",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/role_model.Role"
+                        }
+                    ]
+                },
+                "roleId": {
+                    "type": "integer"
+                },
                 "updatedAt": {
                     "type": "string"
                 },
@@ -1551,28 +1608,23 @@ const docTemplate = `{
                 }
             }
         },
-        "app_model.Application": {
+        "auth_dto.LoginRequest": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "password": {
                     "type": "string"
                 },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
+                "roleId": {
                     "type": "integer"
                 },
-                "name": {
-                    "type": "string"
-                },
-                "slug": {
-                    "type": "string"
-                },
-                "updatedAt": {
+                "username": {
                     "type": "string"
                 }
             }
+        },
+        "gin.H": {
+            "type": "object",
+            "additionalProperties": {}
         },
         "pg.Id": {
             "type": "object",
@@ -1589,32 +1641,8 @@ const docTemplate = `{
         "role_model.Role": {
             "type": "object",
             "properties": {
-                "application": {
-                    "$ref": "#/definitions/app_model.Application"
-                },
-                "applicationId": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pages": {
-                    "$ref": "#/definitions/pg.JsonObject"
-                },
-                "permissions": {
-                    "$ref": "#/definitions/pg.JsonObject"
-                },
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         },

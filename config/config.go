@@ -25,6 +25,8 @@ type Config struct {
 	RedisPort     string
 	RedisUsername string
 	RedisPassword string
+
+	JWTSecret string
 }
 
 func Load() Config {
@@ -53,6 +55,8 @@ func Load() Config {
 	c.RedisPort = cast.ToString(getOrReturnDefault("REDIS_PORT", ""))
 	c.RedisUsername = cast.ToString(getOrReturnDefault("REDIS_USERNAME", ""))
 	c.RedisPassword = cast.ToString(getOrReturnDefault("REDIS_PASSWORD", ""))
+
+	c.JWTSecret = cast.ToString(getOrReturnDefault("JWT_SECRET", ""))
 
 	return c
 }

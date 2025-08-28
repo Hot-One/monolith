@@ -147,6 +147,12 @@ definitions:
         type: string
       phone:
         type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/role_model.Role'
+        description: '@name UserRole'
+      roleId:
+        type: integer
       updatedAt:
         type: string
       username:
@@ -205,20 +211,17 @@ definitions:
       username:
         type: string
     type: object
-  app_model.Application:
+  auth_dto.LoginRequest:
     properties:
-      createdAt:
+      password:
         type: string
-      description:
-        type: string
-      id:
+      roleId:
         type: integer
-      name:
+      username:
         type: string
-      slug:
-        type: string
-      updatedAt:
-        type: string
+    type: object
+  gin.H:
+    additionalProperties: {}
     type: object
   pg.Id:
     properties:
@@ -230,24 +233,8 @@ definitions:
     type: object
   role_model.Role:
     properties:
-      application:
-        $ref: '#/definitions/app_model.Application'
-      applicationId:
-        type: integer
-      createdAt:
-        type: string
-      description:
-        type: string
       id:
         type: integer
-      name:
-        type: string
-      pages:
-        $ref: '#/definitions/pg.JsonObject'
-      permissions:
-        $ref: '#/definitions/pg.JsonObject'
-      updatedAt:
-        type: string
     type: object
   statushttp.Response:
     properties:
@@ -458,6 +445,36 @@ paths:
       summary: app-service-search
       tags:
       - app-service
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: Login Request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/auth_dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: Login
+      tags:
+      - Auth Service
   /role:
     get:
       consumes:
