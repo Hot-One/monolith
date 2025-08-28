@@ -12,12 +12,13 @@ import (
 	"github.com/Hot-One/monolith/pkg/security"
 	"github.com/Hot-One/monolith/storage"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/spf13/cast"
 	"gorm.io/gorm"
 )
 
 type AuthServiceInterface interface {
 	Login(ctx context.Context, input *auth_dto.LoginRequest) (*auth_dto.LoginResponse, error)
-	Logout(ctx context.Context) error
+	Logout(ctx context.Context, token string) error
 }
 
 type AuthService struct {
@@ -90,15 +91,17 @@ func (s *AuthService) Login(ctx context.Context, input *auth_dto.LoginRequest) (
 		}
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"Id":             session,
-		"exp":            expiresAt.Unix(),
-		"iat":            time.Now().Unix(),
-		"nbf":            time.Now().Unix(),
-		"user_id":        user.Id,
-		"role_id":        user.RoleId,
-		"application_id": user.Role.ApplicationId,
-	})
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
+		jwt.MapClaims{
+			"Id":             session,
+			"exp":            expiresAt.Unix(),
+			"iat":            time.Now().Unix(),
+			"nbf":            time.Now().Unix(),
+			"user_id":        user.Id,
+			"role_id":        user.RoleId,
+			"application_id": user.Role.ApplicationId,
+		},
+	)
 
 	tokenString, err := token.SignedString([]byte(s.cfg.JWTSecret))
 	{
@@ -118,7 +121,31 @@ func (s *AuthService) Login(ctx context.Context, input *auth_dto.LoginRequest) (
 	}, nil
 }
 
-func (s *AuthService) Logout(ctx context.Context) error {
-	// Implement your logout logic here
+func (s *AuthService) Logout(ctx context.Context, token string) error {
+	parsedToken, err := jwt.ParseWithClaims(token, jwt.MapClaims{},
+		func(token *jwt.Token) (any, error) {
+			return []byte(s.cfg.JWTSecret), nil
+		},
+	)
+	{
+		if err != nil {
+			s.log.Error("Failed to parse token", logger.Error(err))
+			return err
+		}
+	}
+
+	var id = cast.ToInt(parsedToken.Claims.(jwt.MapClaims)["Id"])
+	var filter = func(tx *gorm.DB) *gorm.DB {
+		return tx.Where("id = ?", id)
+	}
+
+	err = s.srtg.SessionStorage().Delete(ctx, filter)
+	{
+		if err != nil {
+			s.log.Error("Failed to delete session", logger.Error(err))
+			return err
+		}
+	}
+
 	return nil
 }

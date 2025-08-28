@@ -35,9 +35,24 @@ definitions:
       slug:
         type: string
     type: object
-  Role:
+  LoginResponse:
     properties:
       applicationId:
+        type: integer
+      expiresAt:
+        type: string
+      refreshAt:
+        type: string
+      roleId:
+        type: integer
+      token:
+        type: string
+      userId:
+        type: integer
+    type: object
+  Role:
+    properties:
+      application_id:
         type: integer
       createdAt:
         type: string
@@ -149,7 +164,7 @@ definitions:
         type: string
       role:
         allOf:
-        - $ref: '#/definitions/role_model.Role'
+        - $ref: '#/definitions/Role'
         description: '@name UserRole'
       roleId:
         type: integer
@@ -219,9 +234,6 @@ definitions:
         type: integer
       username:
         type: string
-    type: object
-  gin.H:
-    additionalProperties: {}
     type: object
   pg.Id:
     properties:
@@ -463,7 +475,7 @@ paths:
         "200":
           description: Login successful
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/LoginResponse'
         "400":
           description: Bad Request
           schema:
@@ -473,6 +485,33 @@ paths:
           schema:
             $ref: '#/definitions/statushttp.Response'
       summary: Login
+      tags:
+      - Auth Service
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/statushttp.Response'
+      summary: Logout
       tags:
       - Auth Service
   /role:

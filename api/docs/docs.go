@@ -341,8 +341,49 @@ const docTemplate = `{
                     "200": {
                         "description": "Login successful",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/LoginResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/statushttp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "description": "Logout",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth Service"
+                ],
+                "summary": "Logout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -1339,10 +1380,33 @@ const docTemplate = `{
                 }
             }
         },
-        "Role": {
+        "LoginResponse": {
             "type": "object",
             "properties": {
                 "applicationId": {
+                    "type": "integer"
+                },
+                "expiresAt": {
+                    "type": "string"
+                },
+                "refreshAt": {
+                    "type": "string"
+                },
+                "roleId": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "Role": {
+            "type": "object",
+            "properties": {
+                "application_id": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -1514,7 +1578,7 @@ const docTemplate = `{
                     "description": "@name UserRole",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/role_model.Role"
+                            "$ref": "#/definitions/Role"
                         }
                     ]
                 },
@@ -1621,10 +1685,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "gin.H": {
-            "type": "object",
-            "additionalProperties": {}
         },
         "pg.Id": {
             "type": "object",

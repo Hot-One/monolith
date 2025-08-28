@@ -1,6 +1,8 @@
 package auth_handler
 
 import (
+	"strings"
+
 	statushttp "github.com/Hot-One/monolith/api/status_http"
 	"github.com/Hot-One/monolith/config"
 	auth_dto "github.com/Hot-One/monolith/dto/auth"
@@ -60,6 +62,33 @@ func (h *authHandler) Login(c *gin.Context) {
 	statushttp.OK(c, token)
 }
 
+// Logout 			godoc
+// @Summary      	Logout
+// @Description 	Logout
+// @Tags         	Auth Service
+// @Accept       	json
+// @Produce      	json
+// @Param 			Authorization header string true "Bearer {token}"
+// @Success 		204
+// @Failure 		400 {object} statushttp.Response "Bad Request"
+// @Failure 		500 {object} statushttp.Response "Internal Server Error"
+// @Router       	/auth/logout [post]
 func (h *authHandler) Logout(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	{
+		if len(strings.Split(token, " ")) != 2 && strings.Split(token, " ")[0] != "Bearer" {
+			statushttp.Unauthorized(c, "invalid token")
+			return
+		}
+	}
 
+	err := h.srvc.AuthService().Logout(c.Request.Context(), strings.Split(token, " ")[1])
+	{
+		if err != nil {
+			statushttp.InternalServerError(c, err.Error())
+			return
+		}
+	}
+
+	statushttp.NoContent(c)
 }
