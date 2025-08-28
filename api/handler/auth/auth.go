@@ -17,7 +17,7 @@ type authHandler struct {
 	srvc service.ServiceInterface
 }
 
-func NewAuthHandler(group *gin.RouterGroup, cfg *config.Config, log logger.Logger, srvc service.ServiceInterface) {
+func NewAuthHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *config.Config, log logger.Logger) {
 	handler := &authHandler{
 		cfg:  cfg,
 		log:  log,

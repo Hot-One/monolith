@@ -45,7 +45,7 @@ func SetUpRouter(option *Router) *gin.Engine {
 	role_handler.NewRoleHandler(v1, option.Srvc, option.Cfg, option.Log)
 	app_handler.NewAppHandler(v1, option.Srvc, option.Cfg, option.Log)
 	session_handler.NewSessionHandler(v1, option.Srvc, option.Cfg, option.Log)
-	auth_handler.NewAuthHandler(v1, option.Cfg, option.Log, option.Srvc)
+	auth_handler.NewAuthHandler(v1, option.Srvc, option.Cfg, option.Log)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
