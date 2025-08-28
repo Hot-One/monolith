@@ -56,7 +56,7 @@ func (s *AuthService) Login(ctx context.Context, input *auth_dto.LoginRequest) (
 			Joins(`JOIN roles r ON r.id = ur.role_id AND r.id = ?`, input.RoleId)
 	}
 
-	user, err := s.srtg.UserStorage().FindOneAuth(ctx, filter)
+	user, err := s.srtg.UserStorage().FindOne(ctx, filter)
 	{
 		if err != nil {
 			s.log.Error("Failed to find user", logger.Error(err))

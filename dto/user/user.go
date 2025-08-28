@@ -3,6 +3,7 @@ package user_dto
 import (
 	"time"
 
+	role_dto "github.com/Hot-One/monolith/dto/role"
 	role_model "github.com/Hot-One/monolith/models/role"
 	"github.com/Hot-One/monolith/pkg/pg"
 )
@@ -10,19 +11,19 @@ import (
 type UserPage = pg.PageData[User] // @name UserPage
 
 type User struct {
-	Id         int64           `json:"id"`
-	Username   string          `json:"username"`
-	Password   string          `json:"password"`
-	Phone      string          `json:"phone"`
-	Email      string          `json:"email"`
-	FirstName  string          `json:"first_name"`
-	LastName   string          `json:"last_name"`
-	MiddleName string          `json:"middle_name"`
-	Gender     int8            `json:"gender"`
-	RoleId     int64           `json:"roleId,omitempty"`
-	Role       role_model.Role `json:"role,omitempty"` // @name UserRole
-	CreatedAt  *time.Time      `json:"createdAt"`
-	UpdatedAt  *time.Time      `json:"updatedAt"`
+	Id         int64             `json:"id"`
+	Username   string            `json:"username"`
+	Password   string            `json:"password"`
+	Phone      string            `json:"phone"`
+	Email      string            `json:"email"`
+	FirstName  string            `json:"first_name"`
+	LastName   string            `json:"last_name"`
+	MiddleName string            `json:"middle_name"`
+	Gender     int8              `json:"gender"`
+	RoleId     int64             `json:"roleId,omitempty"`
+	Role       role_dto.UserRole `json:"role,omitempty"` // @name UserRole
+	CreatedAt  *time.Time        `json:"createdAt"`
+	UpdatedAt  *time.Time        `json:"updatedAt"`
 } // @name User
 
 type UserCreate struct {
