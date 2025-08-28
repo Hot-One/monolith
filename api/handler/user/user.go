@@ -26,6 +26,7 @@ func NewUserHandler(group *gin.RouterGroup, srvc service.ServiceInterface, confi
 	}
 
 	user := group.Group("/user")
+	user.Use(srvc.AuthService().Middleware())
 	{
 		user.POST("", handler.Create)
 		user.PATCH("/:id", handler.Update)
@@ -37,6 +38,8 @@ func NewUserHandler(group *gin.RouterGroup, srvc service.ServiceInterface, confi
 }
 
 // Create 			godoc
+// @Security		BearerAuth
+// @ID 				user-service-create
 // @Summary 		user-service-create
 // @Description 	user-service-create
 // @Tags 			User Service
@@ -81,6 +84,8 @@ func (h *userHandler) Create(c *gin.Context) {
 }
 
 // Update 			godoc
+// @Security		BearerAuth
+// @ID 				user-service-update
 // @Summary 		user-service-update
 // @Description 	user-service-update
 // @Tags 			User Service
@@ -121,6 +126,8 @@ func (h *userHandler) Update(c *gin.Context) {
 }
 
 // GetList 			godoc
+// @Security		BearerAuth
+// @ID 				user-service-get-list
 // @Summary 		user-service-get-list
 // @Description 	user-service-get-list
 // @Tags 			User Service
@@ -163,6 +170,8 @@ func (h *userHandler) GetList(c *gin.Context) {
 }
 
 // Search 			godoc
+// @Security		BearerAuth
+// @ID 				user-service-search
 // @Summary 		user-service-search
 // @Description 	user-service-search
 // @Tags 			User Service
@@ -195,6 +204,8 @@ func (h *userHandler) Search(c *gin.Context) {
 }
 
 // GetById 			godoc
+// @Security		BearerAuth
+// @ID 				user-service-getbyid
 // @Summary 		user-service-get-by-id
 // @Description 	user-service-get-by-id
 // @Tags 			User Service
@@ -226,6 +237,8 @@ func (h *userHandler) GetById(c *gin.Context) {
 }
 
 // Delete 			godoc
+// @Security		BearerAuth
+// @ID 				user-service-delete
 // @Summary 		user-service-delete
 // @Description 	user-service-delete
 // @Tags 			User Service

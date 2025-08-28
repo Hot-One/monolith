@@ -25,6 +25,7 @@ func NewSessionHandler(group *gin.RouterGroup, srvc service.ServiceInterface, co
 	}
 
 	session := group.Group("/session")
+	session.Use(srvc.AuthService().Middleware())
 	{
 		session.POST("", handler.Create)
 		session.PATCH("/:id", handler.Update)
@@ -36,6 +37,8 @@ func NewSessionHandler(group *gin.RouterGroup, srvc service.ServiceInterface, co
 }
 
 // Create 			godoc
+// @Security		BearerAuth
+// @ID 				session-service-create
 // @Summary 		session-service-create
 // @Description 	session-service-create
 // @Tags 			Session Service
@@ -68,6 +71,8 @@ func (h *sessionHandler) Create(c *gin.Context) {
 }
 
 // Update 			godoc
+// @Security		BearerAuth
+// @ID 				session-service-update
 // @Summary 		session-service-update
 // @Description 	session-service-update
 // @Tags 			Session Service
@@ -107,6 +112,8 @@ func (h *sessionHandler) Update(c *gin.Context) {
 }
 
 // GetList 			godoc
+// @Security		BearerAuth
+// @ID 				session-service-get-list
 // @Summary 		session-service-get-list
 // @Description 	session-service-get-list
 // @Tags 			Session Service
@@ -148,6 +155,8 @@ func (h *sessionHandler) GetList(c *gin.Context) {
 }
 
 // Search 			godoc
+// @Security		BearerAuth
+// @ID 				session-service-search
 // @Summary 		session-service-search
 // @Description 	session-service-search
 // @Tags 			Session Service
@@ -179,6 +188,8 @@ func (h *sessionHandler) Search(c *gin.Context) {
 }
 
 // GetById 			godoc
+// @Security		BearerAuth
+// @ID 				session-service-getbyid
 // @Summary 		session-service-get-by-id
 // @Description 	session-service-get-by-id
 // @Tags 			Session Service
@@ -210,6 +221,8 @@ func (h *sessionHandler) GetById(c *gin.Context) {
 }
 
 // Delete 			godoc
+// @Security		BearerAuth
+// @ID 				session-service-delete
 // @Summary 		session-service-delete
 // @Description 	session-service-delete
 // @Tags 			Session Service

@@ -3,14 +3,17 @@ package auth_service
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
+	statushttp "github.com/Hot-One/monolith/api/status_http"
 	"github.com/Hot-One/monolith/config"
 	auth_dto "github.com/Hot-One/monolith/dto/auth"
 	session_model "github.com/Hot-One/monolith/models/session"
 	"github.com/Hot-One/monolith/pkg/logger"
 	"github.com/Hot-One/monolith/pkg/security"
 	"github.com/Hot-One/monolith/storage"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/spf13/cast"
 	"gorm.io/gorm"
@@ -20,6 +23,7 @@ type AuthServiceInterface interface {
 	Login(ctx context.Context, input *auth_dto.LoginRequest) (*auth_dto.LoginResponse, error)
 	Refresh(ctx context.Context, token string) (*auth_dto.LoginResponse, error)
 	Logout(ctx context.Context, token string) error
+	Middleware() gin.HandlerFunc
 }
 
 type AuthService struct {
@@ -227,4 +231,54 @@ func (s *AuthService) Refresh(ctx context.Context, token string) (*auth_dto.Logi
 		ExpiresAt:     expiresAt,
 		RefreshAt:     refreshAt,
 	}, nil
+}
+
+func (s *AuthService) Middleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var token = c.GetHeader("Authorization")
+		{
+			if len(strings.Split(token, " ")) != 2 && strings.Split(token, " ")[0] != "Bearer" {
+				statushttp.Unauthorized(c, "invalid token")
+				c.Abort()
+				return
+			}
+		}
+
+		token = strings.Split(token, " ")[1]
+
+		parsedToken, err := jwt.ParseWithClaims(token, jwt.MapClaims{},
+			func(token *jwt.Token) (any, error) {
+				return []byte(s.cfg.JWTSecret), nil
+			},
+		)
+		{
+			if err != nil {
+				statushttp.Unauthorized(c, "invalid token")
+				c.Abort()
+				return
+			}
+		}
+
+		var id = cast.ToInt(parsedToken.Claims.(jwt.MapClaims)["Id"])
+		var filter = func(tx *gorm.DB) *gorm.DB {
+			return tx.Where("id = ?", id)
+		}
+
+		session, err := s.srtg.SessionStorage().FindOne(c.Request.Context(), filter)
+		{
+			if err != nil {
+				statushttp.Unauthorized(c, "invalid session")
+				c.Abort()
+				return
+			}
+		}
+
+		if session.ExpiresAt.Before(time.Now()) {
+			statushttp.Unauthorized(c, "session expired")
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
 }

@@ -1,8 +1,6 @@
 package app_handler
 
 import (
-	"fmt"
-
 	statushttp "github.com/Hot-One/monolith/api/status_http"
 	"github.com/Hot-One/monolith/config"
 	app_dto "github.com/Hot-One/monolith/dto/app"
@@ -27,6 +25,7 @@ func NewAppHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *c
 	}
 
 	app := group.Group("/app")
+	app.Use(srvc.AuthService().Middleware())
 	{
 		app.POST("/create", handler.Create)
 		app.PATCH("/:id", handler.Update)
@@ -39,6 +38,8 @@ func NewAppHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *c
 }
 
 // Create 			godoc
+// @Security		BearerAuth
+// @ID 				app-service-create
 // @Summary  		app-service-create
 // @Description 	app-service-create
 // @Tags      		app-service
@@ -70,6 +71,8 @@ func (h *appHandler) Create(c *gin.Context) {
 }
 
 // Update 			godoc
+// @Security		BearerAuth
+// @ID 				app-service-update
 // @Summary  		app-service-update
 // @Description 	app-service-update
 // @Tags      		app-service
@@ -109,6 +112,8 @@ func (h *appHandler) Update(c *gin.Context) {
 }
 
 // GetList 			godoc
+// @Security		BearerAuth
+// @ID 				app-service-get-list
 // @Summary  		app-service-get-list
 // @Description 	app-service-get-list
 // @Tags      		app-service
@@ -150,6 +155,8 @@ func (h *appHandler) GetList(c *gin.Context) {
 }
 
 // Search 			godoc
+// @Security		BearerAuth
+// @ID 				app-service-search
 // @Summary 		app-service-search
 // @Description 	app-service-search
 // @Tags        	app-service
@@ -169,8 +176,6 @@ func (h *appHandler) Search(c *gin.Context) {
 		}
 	}
 
-	fmt.Printf("input: %+v\n", in)
-
 	items, err := h.srvc.Find(c.Request.Context(), &in)
 	{
 		if err != nil {
@@ -183,6 +188,8 @@ func (h *appHandler) Search(c *gin.Context) {
 }
 
 // GetById 			godoc
+// @Security		BearerAuth
+// @ID 				app-service-getbyid
 // @Summary 		app-service-get-by-id
 // @Description 	app-service-get-by-id
 // @Tags        	app-service
@@ -214,6 +221,8 @@ func (h *appHandler) GetById(c *gin.Context) {
 }
 
 // Delete 			godoc
+// @Security		BearerAuth
+// @ID 				app-service-delete
 // @Summary 		app-service-delete
 // @Description 	app-service-delete
 // @Tags        	app-service

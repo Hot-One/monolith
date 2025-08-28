@@ -40,7 +40,7 @@ func SetUpRouter(option *Router) *gin.Engine {
 	r.Use(gin.Recovery(), gin.Logger(), customCORSMiddleware())
 
 	var v1 = r.Group("/v1")
-
+	
 	user_handler.NewUserHandler(v1, option.Srvc, option.Cfg, option.Log)
 	role_handler.NewRoleHandler(v1, option.Srvc, option.Cfg, option.Log)
 	app_handler.NewAppHandler(v1, option.Srvc, option.Cfg, option.Log)

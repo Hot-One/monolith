@@ -25,6 +25,7 @@ func NewRoleHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *
 	}
 
 	role := group.Group("/role")
+	role.Use(srvc.AuthService().Middleware())
 	{
 		role.POST("", handler.Create)
 		role.PATCH("/:id", handler.Update)
@@ -36,6 +37,8 @@ func NewRoleHandler(group *gin.RouterGroup, srvc service.ServiceInterface, cfg *
 }
 
 // Create 			godoc
+// @Security		BearerAuth
+// @ID 				role-service-create
 // @Summary     	role-service-create
 // @Description 	role-service-create
 // @Tags        	Role Service
@@ -68,6 +71,8 @@ func (h *roleHandler) Create(c *gin.Context) {
 }
 
 // Update 			godoc
+// @Security		BearerAuth
+// @ID 				role-service-update
 // @Summary			role-service-update
 // @Description		role-service-update
 // @Tags			Role Service
@@ -107,6 +112,8 @@ func (h *roleHandler) Update(c *gin.Context) {
 }
 
 // GetList 			godoc
+// @Security		BearerAuth
+// @ID 				role-service-getlist
 // @Summary 		role-service-getlist
 // @Description 	role-service-getlist
 // @Tags        	Role Service
@@ -149,6 +156,8 @@ func (h *roleHandler) GetList(c *gin.Context) {
 }
 
 // Search 			godoc
+// @Security		BearerAuth
+// @ID 				role-service-search
 // @Summary			role-service-search
 // @Description		role-service-search
 // @Tags			Role Service
@@ -181,6 +190,8 @@ func (h *roleHandler) Search(c *gin.Context) {
 }
 
 // GetById			godoc
+// @Security		BearerAuth
+// @ID 				role-service-getbyid
 // @Summary			role-service-getbyid
 // @Description		role-service-getbyid
 // @Tags			Role Service
@@ -211,17 +222,19 @@ func (h *roleHandler) GetById(c *gin.Context) {
 	statushttp.OK(c, item)
 }
 
-// Delete 		godoc
-// @Summary		role-service-delete
-// @Description	role-service-delete
-// @Tags		Role Service
-// @Accept		json
-// @Produce		json
-// @Param		id path int64 true "Id"
-// @Success	204
-// @Failure	400 {object} statushttp.Response "Bad Request"
-// @Failure	500 {object} statushttp.Response "Internal Server Error"
-// @Router		/role/{id} [delete]
+// Delete 			godoc
+// @Security		BearerAuth
+// @ID 				role-service-delete
+// @Summary			role-service-delete
+// @Description		role-service-delete
+// @Tags			Role Service
+// @Accept			json
+// @Produce			json
+// @Param			id path int64 true "Id"
+// @Success	204	
+// @Failure	400 	{object} statushttp.Response "Bad Request"
+// @Failure	500 	{object} statushttp.Response "Internal Server Error"
+// @Router			/role/{id} [delete]
 func (h *roleHandler) Delete(c *gin.Context) {
 	id, err := statushttp.GetId(c)
 	{

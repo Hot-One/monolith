@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/app/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "app-service-create",
                 "consumes": [
                     "application/json"
@@ -28,6 +33,7 @@ const docTemplate = `{
                     "app-service"
                 ],
                 "summary": "app-service-create",
+                "operationId": "app-service-create",
                 "parameters": [
                     {
                         "description": "Create App",
@@ -63,6 +69,11 @@ const docTemplate = `{
         },
         "/app/page": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "app-service-get-list",
                 "consumes": [
                     "application/json"
@@ -74,6 +85,7 @@ const docTemplate = `{
                     "app-service"
                 ],
                 "summary": "app-service-get-list",
+                "operationId": "app-service-get-list",
                 "parameters": [
                     {
                         "type": "integer",
@@ -129,6 +141,11 @@ const docTemplate = `{
         },
         "/app/search": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "app-service-search",
                 "consumes": [
                     "application/json"
@@ -140,6 +157,7 @@ const docTemplate = `{
                     "app-service"
                 ],
                 "summary": "app-service-search",
+                "operationId": "app-service-search",
                 "parameters": [
                     {
                         "type": "string",
@@ -184,6 +202,11 @@ const docTemplate = `{
         },
         "/app/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "app-service-get-by-id",
                 "consumes": [
                     "application/json"
@@ -195,6 +218,7 @@ const docTemplate = `{
                     "app-service"
                 ],
                 "summary": "app-service-get-by-id",
+                "operationId": "app-service-getbyid",
                 "parameters": [
                     {
                         "type": "string",
@@ -226,6 +250,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "app-service-delete",
                 "consumes": [
                     "application/json"
@@ -237,6 +266,7 @@ const docTemplate = `{
                     "app-service"
                 ],
                 "summary": "app-service-delete",
+                "operationId": "app-service-delete",
                 "parameters": [
                     {
                         "type": "string",
@@ -265,6 +295,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "app-service-update",
                 "consumes": [
                     "application/json"
@@ -276,6 +311,7 @@ const docTemplate = `{
                     "app-service"
                 ],
                 "summary": "app-service-update",
+                "operationId": "app-service-update",
                 "parameters": [
                     {
                         "type": "string",
@@ -446,6 +482,11 @@ const docTemplate = `{
         },
         "/role": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "role-service-getlist",
                 "consumes": [
                     "application/json"
@@ -457,6 +498,7 @@ const docTemplate = `{
                     "Role Service"
                 ],
                 "summary": "role-service-getlist",
+                "operationId": "role-service-getlist",
                 "parameters": [
                     {
                         "type": "integer",
@@ -505,6 +547,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "role-service-create",
                 "consumes": [
                     "application/json"
@@ -516,6 +563,7 @@ const docTemplate = `{
                     "Role Service"
                 ],
                 "summary": "role-service-create",
+                "operationId": "role-service-create",
                 "parameters": [
                     {
                         "description": "Role Create",
@@ -551,6 +599,11 @@ const docTemplate = `{
         },
         "/role/search": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "role-service-search",
                 "consumes": [
                     "application/json"
@@ -562,6 +615,7 @@ const docTemplate = `{
                     "Role Service"
                 ],
                 "summary": "role-service-search",
+                "operationId": "role-service-search",
                 "parameters": [
                     {
                         "type": "integer",
@@ -601,6 +655,11 @@ const docTemplate = `{
         },
         "/role/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "role-service-getbyid",
                 "consumes": [
                     "application/json"
@@ -612,6 +671,7 @@ const docTemplate = `{
                     "Role Service"
                 ],
                 "summary": "role-service-getbyid",
+                "operationId": "role-service-getbyid",
                 "parameters": [
                     {
                         "type": "integer",
@@ -644,6 +704,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "role-service-delete",
                 "consumes": [
                     "application/json"
@@ -655,6 +720,7 @@ const docTemplate = `{
                     "Role Service"
                 ],
                 "summary": "role-service-delete",
+                "operationId": "role-service-delete",
                 "parameters": [
                     {
                         "type": "integer",
@@ -684,6 +750,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "role-service-update",
                 "consumes": [
                     "application/json"
@@ -695,6 +766,7 @@ const docTemplate = `{
                     "Role Service"
                 ],
                 "summary": "role-service-update",
+                "operationId": "role-service-update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -735,6 +807,11 @@ const docTemplate = `{
         },
         "/session": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "session-service-get-list",
                 "consumes": [
                     "application/json"
@@ -746,6 +823,7 @@ const docTemplate = `{
                     "Session Service"
                 ],
                 "summary": "session-service-get-list",
+                "operationId": "session-service-get-list",
                 "parameters": [
                     {
                         "type": "integer",
@@ -799,6 +877,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "session-service-create",
                 "consumes": [
                     "application/json"
@@ -810,6 +893,7 @@ const docTemplate = `{
                     "Session Service"
                 ],
                 "summary": "session-service-create",
+                "operationId": "session-service-create",
                 "parameters": [
                     {
                         "description": "Session Create",
@@ -845,6 +929,11 @@ const docTemplate = `{
         },
         "/session/search": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "session-service-search",
                 "consumes": [
                     "application/json"
@@ -856,6 +945,7 @@ const docTemplate = `{
                     "Session Service"
                 ],
                 "summary": "session-service-search",
+                "operationId": "session-service-search",
                 "parameters": [
                     {
                         "type": "integer",
@@ -900,6 +990,11 @@ const docTemplate = `{
         },
         "/session/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "session-service-get-by-id",
                 "consumes": [
                     "application/json"
@@ -911,6 +1006,7 @@ const docTemplate = `{
                     "Session Service"
                 ],
                 "summary": "session-service-get-by-id",
+                "operationId": "session-service-getbyid",
                 "parameters": [
                     {
                         "type": "string",
@@ -942,6 +1038,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "session-service-delete",
                 "consumes": [
                     "application/json"
@@ -953,6 +1054,7 @@ const docTemplate = `{
                     "Session Service"
                 ],
                 "summary": "session-service-delete",
+                "operationId": "session-service-delete",
                 "parameters": [
                     {
                         "type": "string",
@@ -981,6 +1083,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "session-service-update",
                 "consumes": [
                     "application/json"
@@ -992,6 +1099,7 @@ const docTemplate = `{
                     "Session Service"
                 ],
                 "summary": "session-service-update",
+                "operationId": "session-service-update",
                 "parameters": [
                     {
                         "type": "string",
@@ -1031,6 +1139,11 @@ const docTemplate = `{
         },
         "/user": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "user-service-get-list",
                 "consumes": [
                     "application/json"
@@ -1042,6 +1155,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "user-service-get-list",
+                "operationId": "user-service-get-list",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1115,6 +1229,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "user-service-create",
                 "consumes": [
                     "application/json"
@@ -1126,6 +1245,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "user-service-create",
+                "operationId": "user-service-create",
                 "parameters": [
                     {
                         "description": "User Create",
@@ -1161,6 +1281,11 @@ const docTemplate = `{
         },
         "/user/search": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "user-service-search",
                 "consumes": [
                     "application/json"
@@ -1172,6 +1297,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "user-service-search",
+                "operationId": "user-service-search",
                 "parameters": [
                     {
                         "type": "string",
@@ -1236,6 +1362,11 @@ const docTemplate = `{
         },
         "/user/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "user-service-get-by-id",
                 "consumes": [
                     "application/json"
@@ -1247,6 +1378,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "user-service-get-by-id",
+                "operationId": "user-service-getbyid",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1279,6 +1411,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "user-service-delete",
                 "consumes": [
                     "application/json"
@@ -1290,6 +1427,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "user-service-delete",
+                "operationId": "user-service-delete",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1319,6 +1457,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "user-service-update",
                 "consumes": [
                     "application/json"
@@ -1330,6 +1473,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "user-service-update",
+                "operationId": "user-service-update",
                 "parameters": [
                     {
                         "type": "integer",

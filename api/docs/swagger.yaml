@@ -267,6 +267,7 @@ paths:
       consumes:
       - application/json
       description: app-service-delete
+      operationId: app-service-delete
       parameters:
       - description: Id
         in: path
@@ -286,6 +287,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: app-service-delete
       tags:
       - app-service
@@ -293,6 +296,7 @@ paths:
       consumes:
       - application/json
       description: app-service-get-by-id
+      operationId: app-service-getbyid
       parameters:
       - description: Id
         in: path
@@ -314,6 +318,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: app-service-get-by-id
       tags:
       - app-service
@@ -321,6 +327,7 @@ paths:
       consumes:
       - application/json
       description: app-service-update
+      operationId: app-service-update
       parameters:
       - description: Id
         in: path
@@ -346,6 +353,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: app-service-update
       tags:
       - app-service
@@ -354,6 +363,7 @@ paths:
       consumes:
       - application/json
       description: app-service-create
+      operationId: app-service-create
       parameters:
       - description: Create App
         in: body
@@ -376,6 +386,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: app-service-create
       tags:
       - app-service
@@ -384,6 +396,7 @@ paths:
       consumes:
       - application/json
       description: app-service-get-list
+      operationId: app-service-get-list
       parameters:
       - default: 1
         description: Page number
@@ -419,6 +432,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: app-service-get-list
       tags:
       - app-service
@@ -427,6 +442,7 @@ paths:
       consumes:
       - application/json
       description: app-service-search
+      operationId: app-service-search
       parameters:
       - in: query
         name: description
@@ -454,6 +470,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: app-service-search
       tags:
       - app-service
@@ -548,6 +566,7 @@ paths:
       consumes:
       - application/json
       description: role-service-getlist
+      operationId: role-service-getlist
       parameters:
       - description: Page number
         in: query
@@ -580,6 +599,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: role-service-getlist
       tags:
       - Role Service
@@ -587,6 +608,7 @@ paths:
       consumes:
       - application/json
       description: role-service-create
+      operationId: role-service-create
       parameters:
       - description: Role Create
         in: body
@@ -609,6 +631,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: role-service-create
       tags:
       - Role Service
@@ -617,6 +641,7 @@ paths:
       consumes:
       - application/json
       description: role-service-delete
+      operationId: role-service-delete
       parameters:
       - description: Id
         format: int64
@@ -637,6 +662,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: role-service-delete
       tags:
       - Role Service
@@ -644,6 +671,7 @@ paths:
       consumes:
       - application/json
       description: role-service-getbyid
+      operationId: role-service-getbyid
       parameters:
       - description: Id
         format: int64
@@ -666,6 +694,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: role-service-getbyid
       tags:
       - Role Service
@@ -673,6 +703,7 @@ paths:
       consumes:
       - application/json
       description: role-service-update
+      operationId: role-service-update
       parameters:
       - description: Id
         format: int64
@@ -699,6 +730,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: role-service-update
       tags:
       - Role Service
@@ -707,6 +740,7 @@ paths:
       consumes:
       - application/json
       description: role-service-search
+      operationId: role-service-search
       parameters:
       - in: query
         name: applicationId
@@ -731,6 +765,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: role-service-search
       tags:
       - Role Service
@@ -739,6 +775,7 @@ paths:
       consumes:
       - application/json
       description: session-service-get-list
+      operationId: session-service-get-list
       parameters:
       - default: 1
         description: Page
@@ -774,6 +811,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: session-service-get-list
       tags:
       - Session Service
@@ -781,6 +820,7 @@ paths:
       consumes:
       - application/json
       description: session-service-create
+      operationId: session-service-create
       parameters:
       - description: Session Create
         in: body
@@ -803,6 +843,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: session-service-create
       tags:
       - Session Service
@@ -811,6 +853,7 @@ paths:
       consumes:
       - application/json
       description: session-service-delete
+      operationId: session-service-delete
       parameters:
       - description: Id
         in: path
@@ -830,6 +873,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: session-service-delete
       tags:
       - Session Service
@@ -837,6 +882,7 @@ paths:
       consumes:
       - application/json
       description: session-service-get-by-id
+      operationId: session-service-getbyid
       parameters:
       - description: Id
         in: path
@@ -858,6 +904,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: session-service-get-by-id
       tags:
       - Session Service
@@ -865,6 +913,7 @@ paths:
       consumes:
       - application/json
       description: session-service-update
+      operationId: session-service-update
       parameters:
       - description: Id
         in: path
@@ -890,6 +939,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: session-service-update
       tags:
       - Session Service
@@ -898,6 +949,7 @@ paths:
       consumes:
       - application/json
       description: session-service-search
+      operationId: session-service-search
       parameters:
       - in: query
         name: applicationId
@@ -925,6 +977,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: session-service-search
       tags:
       - Session Service
@@ -933,6 +987,7 @@ paths:
       consumes:
       - application/json
       description: user-service-get-list
+      operationId: user-service-get-list
       parameters:
       - description: Page number
         in: query
@@ -980,6 +1035,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: user-service-get-list
       tags:
       - User Service
@@ -987,6 +1044,7 @@ paths:
       consumes:
       - application/json
       description: user-service-create
+      operationId: user-service-create
       parameters:
       - description: User Create
         in: body
@@ -1009,6 +1067,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: user-service-create
       tags:
       - User Service
@@ -1017,6 +1077,7 @@ paths:
       consumes:
       - application/json
       description: user-service-delete
+      operationId: user-service-delete
       parameters:
       - description: Id
         format: int64
@@ -1037,6 +1098,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: user-service-delete
       tags:
       - User Service
@@ -1044,6 +1107,7 @@ paths:
       consumes:
       - application/json
       description: user-service-get-by-id
+      operationId: user-service-getbyid
       parameters:
       - description: Id
         format: int64
@@ -1066,6 +1130,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: user-service-get-by-id
       tags:
       - User Service
@@ -1073,6 +1139,7 @@ paths:
       consumes:
       - application/json
       description: user-service-update
+      operationId: user-service-update
       parameters:
       - description: Id
         format: int64
@@ -1099,6 +1166,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: user-service-update
       tags:
       - User Service
@@ -1107,6 +1176,7 @@ paths:
       consumes:
       - application/json
       description: user-service-search
+      operationId: user-service-search
       parameters:
       - in: query
         name: email
@@ -1146,6 +1216,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/statushttp.Response'
+      security:
+      - BearerAuth: []
       summary: user-service-search
       tags:
       - User Service
