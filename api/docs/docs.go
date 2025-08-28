@@ -360,7 +360,7 @@ const docTemplate = `{
             }
         },
         "/auth/logout": {
-            "post": {
+            "delete": {
                 "description": "Logout",
                 "consumes": [
                     "application/json"
@@ -401,7 +401,7 @@ const docTemplate = `{
             }
         },
         "/auth/refresh": {
-            "post": {
+            "put": {
                 "description": "Refresh Token",
                 "consumes": [
                     "application/json"

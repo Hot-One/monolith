@@ -27,7 +27,8 @@ func NewAuthHandler(group *gin.RouterGroup, cfg *config.Config, log logger.Logge
 	auth := group.Group("/auth")
 	{
 		auth.POST("/login", handler.Login)
-		auth.POST("/logout", handler.Logout)
+		auth.DELETE("/logout", handler.Logout)
+		auth.PUT("/refresh", handler.Refresh)
 	}
 }
 
@@ -72,7 +73,7 @@ func (h *authHandler) Login(c *gin.Context) {
 // @Success 		204
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
-// @Router       	/auth/logout [post]
+// @Router       	/auth/logout [delete]
 func (h *authHandler) Logout(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	{
@@ -103,7 +104,7 @@ func (h *authHandler) Logout(c *gin.Context) {
 // @Success 		200 {object} auth_dto.LoginResponse "Token refreshed successfully"
 // @Failure 		400 {object} statushttp.Response "Bad Request"
 // @Failure 		500 {object} statushttp.Response "Internal Server Error"
-// @Router       	/auth/refresh [post]
+// @Router       	/auth/refresh [put]
 func (h *authHandler) Refresh(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	{

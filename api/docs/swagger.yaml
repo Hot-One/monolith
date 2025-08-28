@@ -488,7 +488,7 @@ paths:
       tags:
       - Auth Service
   /auth/logout:
-    post:
+    delete:
       consumes:
       - application/json
       description: Logout
@@ -515,7 +515,7 @@ paths:
       tags:
       - Auth Service
   /auth/refresh:
-    post:
+    put:
       consumes:
       - application/json
       description: Refresh Token
