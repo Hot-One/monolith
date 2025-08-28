@@ -54,11 +54,11 @@ type UserRole struct {
 	UpdatedAt     string        `json:"updatedAt"`
 } // @name Role
 
-func (j Role) Value() (driver.Value, error) {
+func (j UserRole) Value() (driver.Value, error) {
 	return json.Marshal(j)
 }
 
-func (j *Role) Scan(value any) error {
+func (j *UserRole) Scan(value any) error {
 	var bytes []byte
 	switch v := value.(type) {
 	case []byte:
